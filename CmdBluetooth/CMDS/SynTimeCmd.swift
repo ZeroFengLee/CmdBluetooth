@@ -32,7 +32,7 @@ class SynTimeCmd: BaseCommand {
     func sendCmdOnStage(stage: Int) {
         switch stage {
         case 0:
-            curStage++
+            curStage += 1
             (self.parserSession! as! MyParser).writeDataWithResponse(self.testData())
             break
         case 1:

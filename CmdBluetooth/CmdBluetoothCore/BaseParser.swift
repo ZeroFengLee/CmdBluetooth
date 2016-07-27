@@ -30,11 +30,11 @@ import CoreBluetooth
 class BaseParser:NSObject, ParserSession, CBPeripheralDelegate{
     
     var isFree = false
-    lazy var containCharacteristics = [CBCharacteristic]()
-    var retriveServiceIndex = 0
     
+    private var retriveServiceIndex = 0
     private var delegate:ParserDelegate?
     private var curPeripheral:CBPeripheral?
+    private lazy var containCharacteristics = [CBCharacteristic]()
     
     var parserDelegate: ParserDelegate {
         get {
@@ -64,7 +64,6 @@ class BaseParser:NSObject, ParserSession, CBPeripheralDelegate{
     func writeData(data: NSData, characterUuidStr: String, withResponse: Bool) {
         for characteristic in containCharacteristics {
             if characteristic.UUID.UUIDString.lowercaseString == characterUuidStr.lowercaseString {
-                
                 let type: CBCharacteristicWriteType = withResponse ? .WithResponse : .WithoutResponse
                 curPeripheral!.writeValue(data, forCharacteristic: characteristic, type: type)
             }
@@ -97,7 +96,8 @@ class BaseParser:NSObject, ParserSession, CBPeripheralDelegate{
                 }
             }
         }
-        if ++retriveServiceIndex == peripheral.services!.count {
+        retriveServiceIndex += 1
+        if retriveServiceIndex == peripheral.services!.count {
             self.isFree = true
             NSNotificationCenter.defaultCenter().postNotificationName(cmdBluetoothParseFinishNotify, object: nil)
         }
@@ -122,7 +122,7 @@ class BaseParser:NSObject, ParserSession, CBPeripheralDelegate{
     }
     
     //MARK: - Private Method
-    func characteristicFromStr(str: String) -> CBCharacteristic? {
+    private func characteristicFromStr(str: String) -> CBCharacteristic? {
         for characteristic in containCharacteristics {
             if characteristic.UUID.UUIDString == str {
                 return characteristic
@@ -132,6 +132,6 @@ class BaseParser:NSObject, ParserSession, CBPeripheralDelegate{
     }
     
     deinit {
-        
+        print("[Release: ] __BaseParser deinit")
     }
 }

@@ -105,7 +105,7 @@ class BaseCommand:NSObject, ParserDelegate {
     //MARK: - private method
     private func startFailureTimer() {
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
-            self.timer = NSTimer.scheduledTimerWithTimeInterval(self.timeoutInterval, target: self, selector: "failure", userInfo: nil, repeats: false)
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(self.timeoutInterval, target: self, selector: #selector(self.failure), userInfo: nil, repeats: false)
         }
     }
     
