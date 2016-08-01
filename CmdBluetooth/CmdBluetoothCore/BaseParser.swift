@@ -36,31 +36,23 @@ class BaseParser:NSObject, ParserSession, CBPeripheralDelegate{
     private var curPeripheral:CBPeripheral?
     private lazy var containCharacteristics = [CBCharacteristic]()
     
-    var parserDelegate: ParserDelegate {
-        get {
-            return delegate!
-        }
-        set {
-            delegate = newValue
-        }
+    weak var parserDelegate: ParserDelegate? {
+        get { return delegate }
+        set { delegate = newValue }
     }
     
-    var peripheral: CBPeripheral {
-        get {
-            return curPeripheral!
-        }
-        set {
-            curPeripheral = newValue
-        }
+    var peripheral: CBPeripheral? {
+        get { return curPeripheral }
+        set { curPeripheral = newValue }
     }
     
     func startRetrivePeripheral() {
-        if let _curPeripheral = curPeripheral {
-            _curPeripheral.delegate = self
-            _curPeripheral.discoverServices(nil)
+        if let curPeripheral = curPeripheral {
+            curPeripheral.delegate = self
+            curPeripheral.discoverServices(nil)
         }
     }
-
+    
     func writeData(data: NSData, characterUuidStr: String, withResponse: Bool) {
         for characteristic in containCharacteristics {
             if characteristic.UUID.UUIDString.lowercaseString == characterUuidStr.lowercaseString {
@@ -105,9 +97,7 @@ class BaseParser:NSObject, ParserSession, CBPeripheralDelegate{
     
     func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
         if let _delegate = self.delegate {
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                _delegate.receiveData(characteristic.value!, peripheral: peripheral, characteristic: characteristic)
-            })
+            _delegate.receiveData(characteristic.value!, peripheral: peripheral, characteristic: characteristic)
         }
     }
     

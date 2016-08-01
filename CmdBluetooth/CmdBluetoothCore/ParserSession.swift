@@ -30,7 +30,7 @@ import CoreBluetooth
 /**
     `Parser's delegate,reply to the operation of the peripheral`
  */
-public protocol ParserDelegate: NSObjectProtocol {
+public protocol ParserDelegate: class, NSObjectProtocol {
     
     /**
          `callback invoked when receive a data from the device`
@@ -49,16 +49,16 @@ public protocol ParserDelegate: NSObjectProtocol {
  
     `usually, we will inherit the class "BaseParser", if you want to replace "BaseParser", you must implement all of the following properties and methods`
  */
-public protocol ParserSession: NSObjectProtocol {
+public protocol ParserSession: class, NSObjectProtocol {
     /**
         `set parser's agent`
      */
-    var parserDelegate: ParserDelegate { get set }
+    weak var parserDelegate: ParserDelegate? { get set }
     
     /**
         `peripheral be managed by parser`
      */
-    var peripheral: CBPeripheral { get set }
+    var peripheral: CBPeripheral? { get set }
     
     /**
         `indicates whether the parser is idle`
