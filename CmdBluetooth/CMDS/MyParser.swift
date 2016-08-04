@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MyParser: BaseParser {
+class MyParser: CmdBaseParser {
 
     /**
         define types for writing data to BLE device, like this

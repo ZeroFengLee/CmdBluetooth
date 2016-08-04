@@ -27,7 +27,7 @@
 import Foundation
 import CoreBluetooth
 
-class BaseParser:NSObject, ParserSession, CBPeripheralDelegate{
+class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
     
     var isFree = false
     

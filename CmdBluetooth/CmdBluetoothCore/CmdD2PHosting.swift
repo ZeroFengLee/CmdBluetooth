@@ -27,15 +27,15 @@
 import Foundation
 import CoreBluetooth
 
-class D2PHosting:NSObject, ParserDelegate {
+class CmdD2PHosting:NSObject, ParserDelegate {
     
-    static let hosting = D2PHosting()
+    static let hosting = CmdD2PHosting()
     
     /**
         `taking over one parser's agency`
         `usually when the command is completed,let D2PHosting owner the agency`
      */
-    func catchDelegateForSession(session: ParserSession?) {
+    func catchDelegateForSession(session: CmdParserSession?) {
         if let _session = session {
             _session.parserDelegate = self
         }

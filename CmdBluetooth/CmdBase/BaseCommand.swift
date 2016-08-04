@@ -32,14 +32,14 @@ let defaultTimeoutInterval = 4.0
 
 class BaseCommand:NSObject, ParserDelegate {
     
-    var parserSession: ParserSession?
+    var parserSession: CmdParserSession?
     
     var timer: NSTimer?
     var timeoutInterval = defaultTimeoutInterval
     
     override init() {
         super.init()
-        self.parserSession = CentralManager.manager.parser
+        self.parserSession = CmdCentralManager.manager.parser
     }
     
     /**
@@ -84,7 +84,7 @@ class BaseCommand:NSObject, ParserDelegate {
         self.invalidTimer()
         if let _parserSession = self.parserSession {
             _parserSession.isFree = true
-            D2PHosting.hosting.catchDelegateForSession(_parserSession)
+            CmdD2PHosting.hosting.catchDelegateForSession(_parserSession)
         }
     }
     

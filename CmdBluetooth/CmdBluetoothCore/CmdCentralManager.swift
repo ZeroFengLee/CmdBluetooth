@@ -27,17 +27,31 @@
 import Foundation
 import CoreBluetooth.CBCentralManager
 
-public class CentralManager: NSObject, CBCentralManagerDelegate {
+public class CmdCentralManager: NSObject, CBCentralManagerDelegate {
     
-    public static let manager = CentralManager()
-    public var parser: ParserSession?
+    
+    public typealias DiscoveryHandle = ((discovery: CmdDiscovery) -> Void)
+    public typealias ScanCompleteHandle = (Void -> Void)
+    
+    public static let manager = CmdCentralManager()
+    public var parser: CmdParserSession?
     
     private lazy var centerManager: CBCentralManager = {
         let bleQueue = dispatch_queue_create("com.zero.queue.ble", DISPATCH_QUEUE_SERIAL)
-        var centerManager = CBCentralManager(delegate: self, queue: bleQueue)
+        var centerManager = CBCentralManager(delegate: self.centralProxy, queue: bleQueue)
         return centerManager
     }()
     private var lastConnectedPeripheral:CBPeripheral?
+    
+    private lazy var scanner: CmdScanner = {
+        var scanner = CmdScanner()
+        return scanner
+    }()
+    
+    private lazy var centralProxy: CentralManagerDelegateProxy = {
+        var centralProxy = CentralManagerDelegateProxy(stateDelegate: nil, discoveryDelegate: self.scanner, connectionDelegate: nil)
+        return centralProxy
+    }()
     
     override init() {
         super.init()
@@ -49,14 +63,7 @@ public class CentralManager: NSObject, CBCentralManagerDelegate {
         - parameter state:   enum(CBCentralManagerState)
      */
     public var centralStateHandle:((state: CBCentralManagerState) -> Void)?
-    /**
-         `callback when found new peripheral`
-     
-         - parameter peripherals:   [CBPeripheral]
-         - parameter advertisementData: advertisement Data by ble device
-         - parameter RSSI: ble's rssi
-     */
-    public var didScanPeripheralsHandle:((peripheral: DiscoveredPeripheral) -> Void)?
+
     /**
          `callback when connect a peripheral success`
      
@@ -82,16 +89,16 @@ public class CentralManager: NSObject, CBCentralManagerDelegate {
     
         - parameter serviceUuidStrs:   an Array, if = nil, scan all peripheral without filters
     */
-    public func scanWithServices(serviceUuidStrs: [String]?) {
-        let uuids = CentralManager.strsToUuids(serviceUuidStrs)
-        let scanOption = [CBCentralManagerScanOptionAllowDuplicatesKey : false]
-        centerManager.scanForPeripheralsWithServices(uuids, options: scanOption)
+    public func scanWithServices(serviceUUIDStrs: [String]?, duration: NSTimeInterval, discoveryHandle: DiscoveryHandle, completeHandle: ScanCompleteHandle) {
+        scanner.servicesUUIDStrs = serviceUUIDStrs
+        scanner.centralManager = centerManager
+        scanner.scanWithDuration(duration, discoveryHandle: discoveryHandle, completeHandle: completeHandle)
     }
     /** 
         `stop scan peripheral`
      */
     public func stopScan() {
-        centerManager.stopScan()
+        scanner.stopScan()
     }
     /**
          `connect operation`
@@ -118,15 +125,6 @@ public class CentralManager: NSObject, CBCentralManagerDelegate {
         }
     }
     
-    public func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
-        let discoveredPeripheral = DiscoveredPeripheral(peripheral: peripheral, advertisementData: advertisementData, rssi: RSSI.intValue)
-        if let didScanPeripheralsHandle = self.didScanPeripheralsHandle {
-            dispatch_async(dispatch_get_main_queue(), { 
-                didScanPeripheralsHandle(peripheral: discoveredPeripheral)
-            })
-        }
-    }
-    
     public func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
         if let didConnectHandle = self.didConnectHandle {
             dispatch_async(dispatch_get_main_queue(), { 
@@ -138,7 +136,7 @@ public class CentralManager: NSObject, CBCentralManagerDelegate {
             parser.isFree = true
             parser.peripheral = peripheral
             parser.startRetrivePeripheral()
-            D2PHosting.hosting.catchDelegateForSession(parser)
+            CmdD2PHosting.hosting.catchDelegateForSession(parser)
         }
     }
     

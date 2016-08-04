@@ -49,7 +49,7 @@ public protocol ParserDelegate: class, NSObjectProtocol {
  
     `usually, we will inherit the class "BaseParser", if you want to replace "BaseParser", you must implement all of the following properties and methods`
  */
-public protocol ParserSession: class, NSObjectProtocol {
+public protocol CmdParserSession: class, NSObjectProtocol {
     /**
         `set parser's agent`
      */
