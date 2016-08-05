@@ -42,40 +42,37 @@ class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
     }
     
     func writeData(data: NSData, characterUuidStr: String, withResponse: Bool) {
-        for characteristic in containCharacteristics {
-            if characteristic.UUID.UUIDString.lowercaseString == characterUuidStr.lowercaseString {
+        _ = containCharacteristics.map {
+            if $0.UUID.UUIDString.lowercaseString == characterUuidStr.lowercaseString {
                 let type: CBCharacteristicWriteType = withResponse ? .WithResponse : .WithoutResponse
-                curPeripheral!.writeValue(data, forCharacteristic: characteristic, type: type)
+                curPeripheral?.writeValue(data, forCharacteristic: $0, type: type)
             }
         }
     }
     
     func readCharacteristic(charaStr: String) {
-        if let _characteristic = self.characteristicFromStr(charaStr) {
-            curPeripheral!.readValueForCharacteristic(_characteristic)
+        if let characteristic = self.characteristicFromStr(charaStr) {
+            curPeripheral?.readValueForCharacteristic(characteristic)
         }
     }
     
     //MARK: - CBPeripheralDelegate
     func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
-        let services = peripheral.services
-        if let _services = services {
-            for service in _services {
-                peripheral.discoverCharacteristics(nil, forService: service)
-            }
+        guard let services = peripheral.services else { return }
+        _ = services.map {
+            peripheral.discoverCharacteristics(nil, forService: $0)
         }
     }
     
     func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?)  {
-        let characteristics = service.characteristics
-        if let _characteristics = characteristics {
-            for characteristic in _characteristics {
-                containCharacteristics.append(characteristic)
-                if characteristic.properties.contains(CBCharacteristicProperties.Notify) {
-                    peripheral.setNotifyValue(true, forCharacteristic: characteristic)
-                }
+        guard let characteristics = service.characteristics else { return }
+        containCharacteristics = characteristics.reduce(containCharacteristics) {
+            if $1.properties.contains(CBCharacteristicProperties.Notify) {
+                peripheral.setNotifyValue(true, forCharacteristic: $1)
             }
+            return $0 + [$1]
         }
+        
         retriveServiceIndex += 1
         if retriveServiceIndex == peripheral.services!.count {
             self.isFree = true
@@ -84,15 +81,11 @@ class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
     }
     
     func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
-        if let _delegate = self.delegate {
-            _delegate.receiveData(characteristic.value!, peripheral: peripheral, characteristic: characteristic)
-        }
+        delegate?.receiveData(characteristic.value!, peripheral: peripheral, characteristic: characteristic)
     }
     
     func peripheral(peripheral: CBPeripheral, didWriteValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
-        if let _delegate = self.delegate {
-            _delegate.didWriteData(peripheral, characteristic: characteristic, error: error)
-        }
+        delegate?.didWriteData(peripheral, characteristic: characteristic, error: error)
     }
     
     func peripheral(peripheral: CBPeripheral, didUpdateNotificationStateForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
@@ -110,6 +103,6 @@ class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
     }
     
     deinit {
-        print("[Release: ] __BaseParser deinit")
+        print("[Release: ] __BaseParser release")
     }
 }
