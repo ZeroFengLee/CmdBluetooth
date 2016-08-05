@@ -111,10 +111,4 @@ class CmdConnecter: CentralManagerConnectionDelegate {
         connectTimer?.invalidate()
         self.connectTimer = nil
     }
-    
-//    private func peripheralFromUUIDString(uuidStr: String?) -> CBPeripheral? {
-//        guard let uuidStr = uuidStr, centralManager = centralManager else { return nil }
-//        let peripherals = centralManager.retrievePeripheralsWithIdentifiers([NSUUID(UUIDString: uuidStr)!])
-//        return peripherals.count > 0 ? peripherals.first : nil
-//    }
 }

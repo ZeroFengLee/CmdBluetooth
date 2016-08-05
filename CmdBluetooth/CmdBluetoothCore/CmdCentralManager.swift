@@ -5,23 +5,6 @@
 //  Created by Zero on 16/3/17.
 //  Copyright © 2016年 Zero. All rights reserved.
 //
-//  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
-//  furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//  THE SOFTWARE.
 
 
 import Foundation
@@ -35,8 +18,16 @@ public class CmdCentralManager: NSObject, CentralManagerStateDelegate {
     public typealias ConnectFailHandle = ((error: NSError?) -> Void)
     
     public static let manager = CmdCentralManager()
-    public var parser: CmdParserSession?
-    public var autoConnect = false
+    public var parser: CmdParserSession = CmdBaseParser() {
+        didSet {
+            connecter.parser = parser
+        }
+    }
+    public var autoConnect = false {
+        didSet {
+            self.reconnect()
+        }
+    }
     
     private lazy var centerManager: CBCentralManager = {
         let bleQueue = dispatch_queue_create("com.zero.queue.ble", DISPATCH_QUEUE_SERIAL)
@@ -59,6 +50,8 @@ public class CmdCentralManager: NSObject, CentralManagerStateDelegate {
         return scanner
     }()
     
+    private let reconnectPeripheralIdentifier = "reconnectPeripheralIdentifier"
+    
     override init() {
         super.init()
         _ = centerManager
@@ -80,10 +73,14 @@ public class CmdCentralManager: NSObject, CentralManagerStateDelegate {
      */
     public func connect(discovery: CmdDiscovery, duration: NSTimeInterval, success: ConnectSuccessHandle, fail: ConnectFailHandle) {
         connecter.centralManager = centerManager
-        connecter.parser = parser ?? CmdBaseParser()
         connecter.autoConnect = autoConnect
         connecter.discovery = discovery
-        connecter.connectWithDuration(duration, connectSuccess: success, failHandle: fail)
+        
+        connecter.connectWithDuration(duration, connectSuccess: { [weak self] (central, peripheral) in
+            guard let `self` = self else { return }
+                success(central: central, peripheral: peripheral)
+            NSUserDefaults.standardUserDefaults().setObject(peripheral.identifier.UUIDString, forKey: self.reconnectPeripheralIdentifier)
+            }, failHandle: fail)
     }
     
     // CentralManagerStateDelegate
@@ -100,6 +97,21 @@ public class CmdCentralManager: NSObject, CentralManagerStateDelegate {
     }
     
     //MARK: - Private Methods
+    
+    private func reconnect() {
+        let uuidStr = NSUserDefaults.standardUserDefaults().objectForKey(reconnectPeripheralIdentifier) as? String
+        
+        self.scanWithServices(nil, duration: 5, discoveryHandle: { (discovery) in
+            if discovery.peripheral.identifier.UUIDString == uuidStr {
+                self.connecter.centralManager = self.centerManager
+                self.connecter.discovery = discovery
+                self.connecter.connectWithDuration(5, connectSuccess: { (central, peripheral) in
+                    print("重连成功")
+                    }, failHandle: nil)
+            }
+            }, completeHandle: nil)
+    }
+    
     private class func strsToUuids(strs:[String]?) -> [CBUUID]?{
         guard let strs = strs else { return nil }
         var uuids = [CBUUID]()
@@ -109,5 +121,11 @@ public class CmdCentralManager: NSObject, CentralManagerStateDelegate {
             return uuids
         })
         return uuids
+    }
+    
+    private func peripheralFromUUIDString(uuidStr: String?) -> CBPeripheral? {
+        guard let uuidStr = uuidStr else { return nil }
+        let peripherals = centerManager.retrievePeripheralsWithIdentifiers([NSUUID(UUIDString: uuidStr)!])
+        return peripherals.count > 0 ? peripherals.first : nil
     }
 }

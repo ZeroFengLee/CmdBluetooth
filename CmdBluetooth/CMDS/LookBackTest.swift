@@ -30,6 +30,6 @@ class LookBackTest: BaseCommand {
     }
     
     override func receiveData(data: NSData, peripheral: CBPeripheral, characteristic: CBCharacteristic) {
-        print("\(data)")
+        print("\(data) + \(characteristic)")
     }
 }
