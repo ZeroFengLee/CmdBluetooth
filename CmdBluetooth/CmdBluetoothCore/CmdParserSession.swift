@@ -68,7 +68,7 @@ public protocol CmdParserSession: class, NSObjectProtocol {
     /**
         `start to retrive peripheral's services and characteristics`
      */
-    func startRetrivePeripheral()
+    func startRetrivePeripheral(complete: (Void -> Void)?)
     
     /**
         `read a characteristic value manually,`

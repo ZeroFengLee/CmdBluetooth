@@ -11,4 +11,3 @@ import Foundation
 /**
     NOTIFICATION: complete resolution of peripheral
 */
-public let cmdBluetoothParseFinishNotify: String = "cmdBluetoothParseFinishNotify"

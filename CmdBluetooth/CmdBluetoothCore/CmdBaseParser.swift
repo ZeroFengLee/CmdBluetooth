@@ -35,6 +35,7 @@ class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
     private var delegate:ParserDelegate?
     private var curPeripheral:CBPeripheral?
     private lazy var containCharacteristics = [CBCharacteristic]()
+    private var completeHandle: (Void -> Void)?
     
     weak var parserDelegate: ParserDelegate? {
         get { return delegate }
@@ -46,10 +47,14 @@ class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
         set { curPeripheral = newValue }
     }
     
-    func startRetrivePeripheral() {
+    func startRetrivePeripheral(complete: (Void -> Void)?) {
+        retriveServiceIndex = 0
         if let curPeripheral = curPeripheral {
             curPeripheral.delegate = self
             curPeripheral.discoverServices(nil)
+            self.completeHandle = complete
+        } else {
+            complete?()
         }
     }
     
@@ -91,7 +96,7 @@ class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
         retriveServiceIndex += 1
         if retriveServiceIndex == peripheral.services!.count {
             self.isFree = true
-            NSNotificationCenter.defaultCenter().postNotificationName(cmdBluetoothParseFinishNotify, object: nil)
+            self.completeHandle?()
         }
     }
     

@@ -39,7 +39,7 @@ class CmdScanner: CentralManagerDiscoveryDelegate {
     /**
         no central manager -> return false
      */
-    func scanWithDuration(duration: NSTimeInterval, discoveryHandle: DiscoveryHandle, completeHandle: CompleteHandle) -> Bool {
+    func scanWithDuration(duration: NSTimeInterval, discoveryHandle: DiscoveryHandle?, completeHandle: CompleteHandle?) -> Bool {
         guard let centralManager = centralManager else {
             return false
         }
@@ -50,6 +50,12 @@ class CmdScanner: CentralManagerDiscoveryDelegate {
         scanTimer = NSTimer.scheduledTimerWithTimeInterval(duration, target: self, selector: #selector(CmdScanner.timeOut), userInfo: nil, repeats: false)
         let scanOption = [CBCentralManagerScanOptionAllowDuplicatesKey : false]
         centralManager.scanForPeripheralsWithServices(stringsToUUIDs(servicesUUIDStrs), options: scanOption)
+        
+        if let connectedDiscover = retriveConnectedDiscovery(), discoveryHandle = self.discoveryHandle {
+            _ = connectedDiscover.map{
+                discoveryHandle(discovery: $0)
+            }
+        }
         return true
     }
     
@@ -71,6 +77,17 @@ class CmdScanner: CentralManagerDiscoveryDelegate {
     
     @objc private func timeOut() {
         endScan()
+    }
+    
+    private func retriveConnectedDiscovery() -> [CmdDiscovery]? {
+        let servicesUUIDs = stringsToUUIDs(servicesUUIDStrs)
+        if let centralManager = centralManager, servicesUUIDs = servicesUUIDs {
+            let discoverys = centralManager.retrieveConnectedPeripheralsWithServices(servicesUUIDs).map{
+                return CmdDiscovery(peripheral: $0, advertisementData: nil, RSSI: -1)
+            }
+            return discoverys
+        }
+        return nil
     }
     
     private func endScan() {

@@ -30,7 +30,7 @@ public struct CmdDiscovery {
     
     public var peripheral: CBPeripheral
     
-    public var advertisementData: [String : AnyObject]
+    public var advertisementData: [String : AnyObject]?
     
     public var RSSI: Int32
 }
