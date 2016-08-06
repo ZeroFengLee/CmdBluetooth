@@ -18,7 +18,7 @@ public class CmdCentralManager: NSObject, CentralManagerStateDelegate {
     public typealias ConnectFailHandle = ((error: NSError?) -> Void)
     
     public static let manager = CmdCentralManager()
-    public var parser: CmdParserSession = CmdBaseParser() {
+    public var parser: CmdParserSession? {
         didSet {
             connecter.parser = parser
         }

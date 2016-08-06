@@ -24,7 +24,6 @@ public class BaseCommand:NSObject, ParserDelegate {
         super.init()
         self.parserSession = CmdCentralManager.manager.parser
     }
-    
     /**
         `In front of the new command, you should perform this function.`
         `to check the characteristic available?`
@@ -32,13 +31,13 @@ public class BaseCommand:NSObject, ParserDelegate {
         - returns:  `true: go ahead / false: fail`
      */
     public func start() -> Bool {
-        if  self.parserSession != nil && self.parserSession!.isFree {
-            self.parserSession!.isFree = false
-            self.parserSession!.parserDelegate = self
-            self.startFailureTimer()
-            return true
+        guard let parserSession = self.parserSession where parserSession.isFree else {
+            return false
         }
-        return false
+        parserSession.isFree = false
+        parserSession.parserDelegate = self
+        self.startFailureTimer()
+        return true
     }
     
     /**
@@ -89,7 +88,8 @@ public class BaseCommand:NSObject, ParserDelegate {
     //MARK: - private method
     
     private func startFailureTimer() {
-        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+        dispatch_async(dispatch_get_main_queue()) { [weak self] () -> Void in
+            guard let `self` = self else { return }
             self.timer = NSTimer.scheduledTimerWithTimeInterval(self.timeoutInterval, target: self, selector: #selector(self.failure), userInfo: nil, repeats: false)
         }
     }

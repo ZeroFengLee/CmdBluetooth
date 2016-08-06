@@ -27,5 +27,13 @@ class MyParser: CmdBaseParser {
         try! super.writeData(data, characterUUIDStr: writeCharacterUUIDStr, withResponse: false)
     }
     
+    func readData(characterUUIDStr: String) {
+        do {
+            try super.readCharacteristic(characterUUIDStr)
+        } catch let error {
+            print("[Error: ]__Read Data Error    " + "\(error)")
+        }
+    }
+    
     //......Many....many ^_^!
 }
