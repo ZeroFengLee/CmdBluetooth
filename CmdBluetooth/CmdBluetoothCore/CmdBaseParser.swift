@@ -10,61 +10,62 @@
 import Foundation
 import CoreBluetooth
 
-class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
+public class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
     
-    var isFree = false
-    
+    public var isFree = false
     private var retriveServiceIndex = 0
     private var delegate:ParserDelegate?
     private var curPeripheral:CBPeripheral?
     private lazy var containCharacteristics = [CBCharacteristic]()
     private var completeHandle: (Void -> Void)?
-    
-    weak var parserDelegate: ParserDelegate? {
+
+    weak public var parserDelegate: ParserDelegate? {
         get { return delegate }
         set { delegate = newValue }
     }
     
-    var peripheral: CBPeripheral? {
+    public var peripheral: CBPeripheral? {
         get { return curPeripheral }
         set { curPeripheral = newValue }
     }
     
-    func startRetrivePeripheral(complete: (Void -> Void)?) {
+    public func startRetrivePeripheral(complete: (Void -> Void)?) {
         retriveServiceIndex = 0
-        if let curPeripheral = curPeripheral {
-            curPeripheral.delegate = self
-            curPeripheral.discoverServices(nil)
-            self.completeHandle = complete
-        } else {
-            complete?()
+        guard let curPeripheral = curPeripheral else { complete?(); return }
+        curPeripheral.delegate = self
+        curPeripheral.discoverServices(nil)
+        self.completeHandle = complete
+    }
+    
+    public func writeData(data: NSData, characterUUIDStr: String, withResponse: Bool) throws {
+        do {
+            let (per, chara) = try self.prepareForAction(characterUUIDStr)
+            let type: CBCharacteristicWriteType = withResponse ? .WithResponse : .WithoutResponse
+            per.writeValue(data, forCharacteristic: chara, type: type)
+        } catch let error {
+            throw error
         }
     }
     
-    func writeData(data: NSData, characterUuidStr: String, withResponse: Bool) {
-        _ = containCharacteristics.map {
-            if $0.UUID.UUIDString.lowercaseString == characterUuidStr.lowercaseString {
-                let type: CBCharacteristicWriteType = withResponse ? .WithResponse : .WithoutResponse
-                curPeripheral?.writeValue(data, forCharacteristic: $0, type: type)
-            }
-        }
-    }
-    
-    func readCharacteristic(charaStr: String) {
-        if let characteristic = self.characteristicFromStr(charaStr) {
-            curPeripheral?.readValueForCharacteristic(characteristic)
+    public func readCharacteristic(characterUUIDStr: String) throws {
+        do {
+            let (per, chara) = try self.prepareForAction(characterUUIDStr)
+            per.readValueForCharacteristic(chara)
+        } catch let error {
+            throw error
         }
     }
     
     //MARK: - CBPeripheralDelegate
-    func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+    
+    public func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
         guard let services = peripheral.services else { return }
         _ = services.map {
             peripheral.discoverCharacteristics(nil, forService: $0)
         }
     }
     
-    func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?)  {
+    public func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?)  {
         guard let characteristics = service.characteristics else { return }
         containCharacteristics = characteristics.reduce(containCharacteristics) {
             if $1.properties.contains(CBCharacteristicProperties.Notify) {
@@ -80,26 +81,36 @@ class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
         }
     }
     
-    func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    public func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
         delegate?.receiveData(characteristic.value!, peripheral: peripheral, characteristic: characteristic)
     }
     
-    func peripheral(peripheral: CBPeripheral, didWriteValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    public func peripheral(peripheral: CBPeripheral, didWriteValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
         delegate?.didWriteData(peripheral, characteristic: characteristic, error: error)
     }
     
-    func peripheral(peripheral: CBPeripheral, didUpdateNotificationStateForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    public func peripheral(peripheral: CBPeripheral, didUpdateNotificationStateForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
         
     }
     
     //MARK: - Private Method
-    private func characteristicFromStr(str: String) -> CBCharacteristic? {
-        for characteristic in containCharacteristics {
-            if characteristic.UUID.UUIDString == str {
-                return characteristic
-            }
+    
+    private func prepareForAction(UUIDStr: String) throws -> (CBPeripheral, CBCharacteristic) {
+        guard let curPeripheral = curPeripheral else {
+            throw CmdParserError.NoPeripheral
         }
-        return nil
+        
+        let flatResults = containCharacteristics.flatMap { (chara) -> CBCharacteristic? in
+            if chara.UUID.UUIDString.lowercaseString == UUIDStr.lowercaseString {
+                return chara
+            }
+            return nil
+        }
+        if flatResults.count == 0 {
+            throw CmdParserError.WrongCharacterUUIDStr
+        }
+        
+        return (curPeripheral, flatResults.first!)
     }
     
     deinit {

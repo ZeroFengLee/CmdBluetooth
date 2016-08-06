@@ -32,4 +32,8 @@ class LookBackTest: BaseCommand {
     override func receiveData(data: NSData, peripheral: CBPeripheral, characteristic: CBCharacteristic) {
         print("\(data) + \(characteristic)")
     }
+    
+    deinit {
+        print("[Release: ] __LookBackTest release")
+    }
 }

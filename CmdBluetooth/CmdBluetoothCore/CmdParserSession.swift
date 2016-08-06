@@ -60,7 +60,7 @@ public protocol CmdParserSession: class, NSObjectProtocol {
      
         - parameter charaStr: characteristic's uuid string
      */
-    func readCharacteristic(charaStr: String)
+    func readCharacteristic(characterUUIDStr: String) throws
     
     /**
         `to write the data inside the device with control parameters`
@@ -69,5 +69,5 @@ public protocol CmdParserSession: class, NSObjectProtocol {
         - parameter characterUuidStr: characteristic's uuid string
         - parameter withResponse: true/false
      */
-    func writeData(data: NSData, characterUuidStr: String, withResponse: Bool)
+    func writeData(data: NSData, characterUUIDStr: String, withResponse: Bool) throws
 }

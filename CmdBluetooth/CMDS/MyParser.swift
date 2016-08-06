@@ -16,11 +16,15 @@ class MyParser: CmdBaseParser {
         define types for writing data to BLE device, like this
      */
     func writeDataWithResponse(data: NSData) {
-        super.writeData(data, characterUuidStr: writeCharacterUUIDStr, withResponse: true)
+        do {
+            try super.writeData(data, characterUUIDStr: writeCharacterUUIDStr, withResponse: true)
+        } catch let error {
+            print("[Error: ]__Write Data Error    " + "\(error)")
+        }
     }
     
     func writeDataWithoutResponse(data: NSData) {
-        super.writeData(data, characterUuidStr: "ff10", withResponse: false)
+        try! super.writeData(data, characterUUIDStr: writeCharacterUUIDStr, withResponse: false)
     }
     
     //......Many....many ^_^!

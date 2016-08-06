@@ -22,7 +22,6 @@ class CmdConnecter: CentralManagerConnectionDelegate {
     private var successHandle: SuccessHandle?
     private var failHandle: FailHandle?
     private var lastPeripheral: CBPeripheral?
-    private var reconnectPeripheralIndentifier: String?
     private var isCancel = false
     
     /**
@@ -60,14 +59,13 @@ class CmdConnecter: CentralManagerConnectionDelegate {
         self.lastPeripheral = peripheral
         self.invalidateTimer()
         
-        if let parser = parser {
-            parser.isFree = true
-            parser.peripheral = peripheral
-            CmdD2PHosting.hosting.catchDelegateForSession(parser)
-            parser.startRetrivePeripheral{ [weak self] _ in
-                guard let `self` = self else { return }
-                self.successHandle?(central: central, peripheral: peripheral)
-            }
+        guard let parser = self.parser else { return }
+        parser.isFree = true
+        parser.peripheral = peripheral
+        CmdD2PHosting.hosting.catchDelegateForSession(parser)
+        parser.startRetrivePeripheral{ [weak self] _ in
+            guard let `self` = self else { return }
+            self.successHandle?(central: central, peripheral: peripheral)
         }
     }
     

@@ -25,6 +25,7 @@ public class CmdCentralManager: NSObject, CentralManagerStateDelegate {
     }
     public var autoConnect = false {
         didSet {
+            connecter.autoConnect = autoConnect
             self.reconnect()
         }
     }
@@ -83,8 +84,7 @@ public class CmdCentralManager: NSObject, CentralManagerStateDelegate {
             }, failHandle: fail)
     }
     
-    // CentralManagerStateDelegate
-    
+    //MARK: - CentralManagerStateDelegate
     func centralManagerDidUpdateState(central: CBCentralManager) {
         switch central.state {
         case .PoweredOn:
@@ -97,17 +97,14 @@ public class CmdCentralManager: NSObject, CentralManagerStateDelegate {
     }
     
     //MARK: - Private Methods
-    
     private func reconnect() {
         let uuidStr = NSUserDefaults.standardUserDefaults().objectForKey(reconnectPeripheralIdentifier) as? String
-        
-        self.scanWithServices(nil, duration: 5, discoveryHandle: { (discovery) in
+        self.scanWithServices(nil, duration: DBL_MAX, discoveryHandle: { discovery in
             if discovery.peripheral.identifier.UUIDString == uuidStr {
+                self.stopScan()
                 self.connecter.centralManager = self.centerManager
                 self.connecter.discovery = discovery
-                self.connecter.connectWithDuration(5, connectSuccess: { (central, peripheral) in
-                    print("重连成功")
-                    }, failHandle: nil)
+                self.connecter.connectWithDuration(DBL_MAX, connectSuccess: nil, failHandle: nil)
             }
             }, completeHandle: nil)
     }
@@ -121,11 +118,5 @@ public class CmdCentralManager: NSObject, CentralManagerStateDelegate {
             return uuids
         })
         return uuids
-    }
-    
-    private func peripheralFromUUIDString(uuidStr: String?) -> CBPeripheral? {
-        guard let uuidStr = uuidStr else { return nil }
-        let peripherals = centerManager.retrievePeripheralsWithIdentifiers([NSUUID(UUIDString: uuidStr)!])
-        return peripherals.count > 0 ? peripherals.first : nil
     }
 }

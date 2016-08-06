@@ -11,3 +11,13 @@ import Foundation
 /**
     NOTIFICATION: complete resolution of peripheral
 */
+
+/**
+    Parser Error
+ */
+public enum CmdParserError: ErrorType {
+    case WrongCharacterUUIDStr
+    case NoPeripheral
+}
+
+
