@@ -15,7 +15,7 @@ class LookBackTest: BaseCommand {
         if !super.start() {
             return
         }
-        (self.parserSession! as! MyParser).writeDataWithResponse(self.testData())
+        (self.parserSession! as! MyParser).writeDataWithoutResponse(self.testData())
     }
     
     func testData() -> NSData {

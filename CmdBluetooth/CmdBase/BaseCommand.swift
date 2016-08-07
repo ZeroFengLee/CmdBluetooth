@@ -11,7 +11,7 @@ import Foundation
 import CoreBluetooth
 
 //the default timeout
-let defaultTimeoutInterval = 4.0
+let defaultTimeoutInterval = 0.5
 
 public class BaseCommand:NSObject, ParserDelegate {
     
@@ -31,7 +31,7 @@ public class BaseCommand:NSObject, ParserDelegate {
         - returns:  `true: go ahead / false: fail`
      */
     public func start() -> Bool {
-        guard let parserSession = self.parserSession where parserSession.isFree else {
+        guard let parserSession = self.parserSession where parserSession.isFree && parserSession.connected else {
             return false
         }
         parserSession.isFree = false
@@ -64,13 +64,13 @@ public class BaseCommand:NSObject, ParserDelegate {
      */
     public func finish() {
         self.invalidTimer()
-        if let _parserSession = self.parserSession {
-            _parserSession.isFree = true
-            CmdD2PHosting.hosting.catchDelegateForSession(_parserSession)
+        if let parserSession = self.parserSession {
+            parserSession.isFree = true
+            parserSession.parserDelegate = nil
         }
     }
     
-     //   `function lists, override the following method if you need`
+    //   `function lists, override the following method if you need`
     public func receiveData(data: NSData, peripheral: CBPeripheral, characteristic:CBCharacteristic) {
         //override by subclass
     }
@@ -95,9 +95,10 @@ public class BaseCommand:NSObject, ParserDelegate {
     }
     
     private func invalidTimer() {
-        if (self.timer != nil) && self.timer!.valid {
-            self.timer!.invalidate()
-            self.timer = nil
+        guard let timer = self.timer where timer.valid else {
+            return
         }
+        self.timer!.invalidate()
+        self.timer = nil
     }
 }

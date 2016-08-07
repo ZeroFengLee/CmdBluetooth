@@ -13,8 +13,10 @@ import CoreBluetooth
 public class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
     
     public var isFree = false
+    public var connected = false
     private var retriveServiceIndex = 0
     private var delegate:ParserDelegate?
+    private var comingDataMonitor: ParserDataReceiveDelegate?
     private var curPeripheral:CBPeripheral?
     private lazy var containCharacteristics = [CBCharacteristic]()
     private var completeHandle: (Void -> Void)?
@@ -22,6 +24,11 @@ public class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
     weak public var parserDelegate: ParserDelegate? {
         get { return delegate }
         set { delegate = newValue }
+    }
+    
+    weak public var dataComingMonitor: ParserDataReceiveDelegate? {
+        get { return self.comingDataMonitor }
+        set { self.comingDataMonitor = newValue }
     }
     
     public var peripheral: CBPeripheral? {
@@ -82,6 +89,7 @@ public class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
     }
     
     public func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+        dataComingMonitor?.receiveData(characteristic.value!, peripheral: peripheral, characteristic: characteristic)
         delegate?.receiveData(characteristic.value!, peripheral: peripheral, characteristic: characteristic)
     }
     

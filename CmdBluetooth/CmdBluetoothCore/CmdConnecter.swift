@@ -61,8 +61,8 @@ class CmdConnecter: CentralManagerConnectionDelegate {
         
         guard let parser = self.parser else { return }
         parser.isFree = true
+        parser.connected = true
         parser.peripheral = peripheral
-        CmdD2PHosting.hosting.catchDelegateForSession(parser)
         parser.startRetrivePeripheral{ [weak self] _ in
             guard let `self` = self else { return }
             self.successHandle?(central: central, peripheral: peripheral)
@@ -77,6 +77,7 @@ class CmdConnecter: CentralManagerConnectionDelegate {
     }
     
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+        parser?.connected = false
         if isCancel {
             self.lastPeripheral = nil
             isCancel = false

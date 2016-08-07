@@ -19,8 +19,8 @@ class CmdD2PHosting:NSObject, ParserDelegate {
         `usually when the command is completed,let D2PHosting owner the agency`
      */
     func catchDelegateForSession(session: CmdParserSession?) {
-        if let _session = session {
-            _session.parserDelegate = self
+        if let session = session {
+            session.parserDelegate = self
         }
     }
     

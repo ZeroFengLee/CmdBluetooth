@@ -18,6 +18,7 @@ public class CmdCentralManager: NSObject, CentralManagerStateDelegate {
     public typealias ConnectFailHandle = ((error: NSError?) -> Void)
     
     public static let manager = CmdCentralManager()
+    public var centralState: CBCentralManagerState = .Unknown
     public var parser: CmdParserSession? {
         didSet {
             connecter.parser = parser
@@ -85,18 +86,22 @@ public class CmdCentralManager: NSObject, CentralManagerStateDelegate {
     }
     
     //MARK: - CentralManagerStateDelegate
+    
     func centralManagerDidUpdateState(central: CBCentralManager) {
         switch central.state {
         case .PoweredOn:
             if autoConnect {
                 connecter.connectLastPeripheral()
             }
+        case .PoweredOff:
+            parser?.connected = false
         default:
             break
         }
     }
     
     //MARK: - Private Methods
+    
     private func reconnect() {
         let uuidStr = NSUserDefaults.standardUserDefaults().objectForKey(reconnectPeripheralIdentifier) as? String
         self.scanWithServices(nil, duration: DBL_MAX, discoveryHandle: { discovery in

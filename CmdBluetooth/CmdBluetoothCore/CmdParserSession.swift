@@ -10,17 +10,17 @@
 import Foundation
 import CoreBluetooth
 
+public protocol ParserDataReceiveDelegate: class, NSObjectProtocol {
+    /**
+     `callback invoked when receive a data from the device`
+     `data stream received from the device`
+     */
+    func receiveData(data: NSData, peripheral: CBPeripheral, characteristic:CBCharacteristic)
+}
 /**
     `Parser's delegate,reply to the operation of the peripheral`
  */
-public protocol ParserDelegate: class, NSObjectProtocol {
-    
-    /**
-         `callback invoked when receive a data from the device`
-         `data stream received from the device`
-     */
-    func receiveData(data: NSData, peripheral: CBPeripheral, characteristic:CBCharacteristic)
-    
+public protocol ParserDelegate: class, NSObjectProtocol, ParserDataReceiveDelegate {
     /**
      `get the state whether written to success`
      */
@@ -37,17 +37,22 @@ public protocol CmdParserSession: class, NSObjectProtocol {
         `set parser's agent`
      */
     weak var parserDelegate: ParserDelegate? { get set }
-    
+    /**
+        `data listener`
+     */
+    weak var dataComingMonitor: ParserDataReceiveDelegate? {get set}
     /**
         `peripheral be managed by parser`
      */
     var peripheral: CBPeripheral? { get set }
-    
     /**
         `indicates whether the parser is idle`
      */
     var isFree: Bool { get set }
-    
+    /**
+        `connect state`
+     */
+    var connected: Bool { get set }
     /**
         `start to retrive peripheral's services and characteristics`
      */
