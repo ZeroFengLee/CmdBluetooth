@@ -15,10 +15,9 @@ let defaultTimeoutInterval = 0.5
 
 public class BaseCommand:NSObject, ParserDelegate {
     
-    var parserSession: CmdParserSession?
-    
-    var timer: NSTimer?
-    var timeoutInterval = defaultTimeoutInterval
+    internal var parserSession: CmdParserSession?
+    private var timer: NSTimer?
+    private var timeoutInterval = defaultTimeoutInterval
     
     override init() {
         super.init()
@@ -36,8 +35,17 @@ public class BaseCommand:NSObject, ParserDelegate {
         }
         parserSession.isFree = false
         parserSession.parserDelegate = self
-        self.startFailureTimer()
         return true
+    }
+    /**
+     use failure timer
+     */
+    public func startFailureTimer(intervarl: NSTimeInterval = defaultTimeoutInterval) {
+        self.timeoutInterval = intervarl
+        dispatch_async(dispatch_get_main_queue()) { [weak self] () -> Void in
+            guard let `self` = self else { return }
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(self.timeoutInterval, target: self, selector: #selector(self.failure), userInfo: nil, repeats: false)
+        }
     }
     
     /**
@@ -51,7 +59,7 @@ public class BaseCommand:NSObject, ParserDelegate {
     /**
          `If the task is a long time, after receiving data per packet will refresh timer`
      */
-    public func updateTime() {
+    public func updateTimer() {
         if (self.timer != nil) && self.timer!.valid {
             self.timer!.fireDate = NSDate().dateByAddingTimeInterval(timeoutInterval)
         }
@@ -86,13 +94,6 @@ public class BaseCommand:NSObject, ParserDelegate {
     }
     
     //MARK: - private method
-    
-    private func startFailureTimer() {
-        dispatch_async(dispatch_get_main_queue()) { [weak self] () -> Void in
-            guard let `self` = self else { return }
-            self.timer = NSTimer.scheduledTimerWithTimeInterval(self.timeoutInterval, target: self, selector: #selector(self.failure), userInfo: nil, repeats: false)
-        }
-    }
     
     private func invalidTimer() {
         guard let timer = self.timer where timer.valid else {

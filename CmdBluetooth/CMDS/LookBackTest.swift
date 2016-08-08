@@ -12,6 +12,7 @@ import CoreBluetooth
 class LookBackTest: BaseCommand {
 
     func lookBackTest() {
+        self.timeoutInterval = 0.1
         if !super.start() {
             return
         }
@@ -30,6 +31,7 @@ class LookBackTest: BaseCommand {
     }
     
     override func receiveData(data: NSData, peripheral: CBPeripheral, characteristic: CBCharacteristic) {
+        guard characteristic.UUID.UUIDString == "6E400003-B5A3-F393-E0A9-E50E24DCCA9E" else { return }
         print("\(data) + \(characteristic)")
     }
     
