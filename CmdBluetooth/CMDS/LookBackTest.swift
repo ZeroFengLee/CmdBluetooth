@@ -12,10 +12,11 @@ import CoreBluetooth
 class LookBackTest: BaseCommand {
 
     func lookBackTest() {
-        self.timeoutInterval = 0.1
+        
         if !super.start() {
             return
         }
+        super.startFailureTimer(0.5)
         (self.parserSession! as! MyParser).writeDataWithoutResponse(self.testData())
     }
     

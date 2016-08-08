@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-                    Use on iOS
+                    Use on iOS, For bluetooth4.0
                    DESC
 
   s.homepage     = "https://github.com/ZeroFengLee"
