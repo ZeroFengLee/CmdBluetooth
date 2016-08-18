@@ -6,11 +6,17 @@ CmdBluetooth是一个针对于iOS的轻量级可扩展框架,Core内部将蓝牙
 
 我们团队当前开发使用的是OC版本，已经适用于5套以上不同的蓝牙协议。swift版本在完善中，如果你有好的建议，欢迎提交你的PR。
 
-##开始使用
+##安装
 
-- 将文件夹  **"CmdBluetoothCore"**导入到项目中
-- 参照文件夹 **"CMDS"** 根据具体的蓝牙协议封装命令
-- 参照 **"ViewController"**中使用框架
+- Podfile
+
+在podfile中添加PieceStore依赖
+
+> pod 'PieceStore', '~> 1.0.5'
+
+然后运行pod 更新
+
+>$ pod install
 
 ##框架结构
 
@@ -51,12 +57,12 @@ define types for writing data to BLE device, like this
 */
 func writeDataWithResponse(data: NSData) {
 
-super.writeData(data, characterUuidStr: "fff6", withResponse: true)
+    super.writeData(data, characterUuidStr: "fff6", withResponse: true)
 }
 
 func writeDataWithoutResponse(data: NSData) {
 
-super.writeData(data, characterUuidStr: "ff10", withResponse: false)
+    super.writeData(data, characterUuidStr: "ff10", withResponse: false)
 }
 
 //......Many....many ^_^!
@@ -82,15 +88,15 @@ super.timeoutInterval = 5
 ``` swift
 override func failure() {
 
-super.failure()
+    super.failure()
 }
 ```
 - 在成功后调用父类的finish()刷新解析器的状态
 ``` swift
 case 1:
-closureSuccess!()
-super.finish()
-break
+    closureSuccess!()
+    super.finish()
+    break
 ```
 
 ☆  **使用CentralManager类来进行蓝牙的扫描链接等**
@@ -104,10 +110,10 @@ centerManager.parser = MyParser()
 ``` swift
 SynTimeCmd().setCurrentTime({ () -> Void in
 
-print("suc")
+    print("suc")
 ) { () -> Void in
 
-print("fail")
+    print("fail")
 }
 ```
 
