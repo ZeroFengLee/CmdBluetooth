@@ -16,14 +16,47 @@ public class CmdCentralManager: NSObject, CentralManagerStateDelegate {
     public typealias ScanCompleteHandle = (Void -> Void)
     public typealias ConnectSuccessHandle = ((central: CBCentralManager, peripheral: CBPeripheral) -> Void)
     public typealias ConnectFailHandle = ((error: NSError?) -> Void)
+    /**
+     listen for cetral state
+     */
+    public var centralState: ((state: CBCentralManagerState) -> Void)?
+    /**
+     connect status
+     */
+    public var connectedStatus: Bool {
+        get {
+            guard let parser = parser else { return false }
+            return parser.connected
+        }
+    }
+    /**
+     central status
+     */
+    public var centralStatus: CBCentralManagerState {
+        get {
+            return centerManager.state
+        }
+    }
+    /**
+     current connected peripheral
+     */
+    public var currentConnectedPeripheral: CBPeripheral? {
+        get {
+            guard let parser = parser where parser.connected else { return nil }
+            return parser.peripheral
+        }
+    }
     
     public static let manager = CmdCentralManager()
-    public var centralState: CBCentralManagerState = .Unknown
+    /**
+     the parser for parse the peripheral
+     */
     public var parser: CmdParserSession? {
         didSet {
             connecter.parser = parser
         }
     }
+    
     public var autoConnect = false {
         didSet {
             connecter.autoConnect = autoConnect
@@ -85,9 +118,26 @@ public class CmdCentralManager: NSObject, CentralManagerStateDelegate {
             }, failHandle: fail)
     }
     
+    public func cancelConnect() {
+        connecter.disConnect()
+    }
+    
+    public func reconnectWithIdentifier(identifier: String?, duration: NSTimeInterval, success: ConnectSuccessHandle?, fail: ConnectFailHandle?, complete: ScanCompleteHandle?) {
+        self.scanWithServices(nil, duration: duration, discoveryHandle: { discovery in
+            if discovery.peripheral.identifier.UUIDString == identifier {
+                self.stopScan()
+                self.connecter.centralManager = self.centerManager
+                self.connecter.discovery = discovery
+                self.connecter.connectWithDuration(duration, connectSuccess: success, failHandle: fail)
+            }
+            }, completeHandle: complete)
+    }
+    
     //MARK: - CentralManagerStateDelegate
     
     func centralManagerDidUpdateState(central: CBCentralManager) {
+        NSNotificationCenter.defaultCenter().postNotificationName(CmdCentralStateNotify, object: central.state == .PoweredOn)
+        centralState?(state: central.state)
         switch central.state {
         case .PoweredOn:
             if autoConnect {
@@ -104,24 +154,15 @@ public class CmdCentralManager: NSObject, CentralManagerStateDelegate {
     
     private func reconnect() {
         let uuidStr = NSUserDefaults.standardUserDefaults().objectForKey(reconnectPeripheralIdentifier) as? String
-        self.scanWithServices(nil, duration: DBL_MAX, discoveryHandle: { discovery in
-            if discovery.peripheral.identifier.UUIDString == uuidStr {
-                self.stopScan()
-                self.connecter.centralManager = self.centerManager
-                self.connecter.discovery = discovery
-                self.connecter.connectWithDuration(DBL_MAX, connectSuccess: nil, failHandle: nil)
-            }
-            }, completeHandle: nil)
+        self.reconnectWithIdentifier(uuidStr, duration: DBL_MAX, success: nil, fail: nil, complete: nil)
     }
     
     private class func strsToUuids(strs:[String]?) -> [CBUUID]?{
         guard let strs = strs else { return nil }
-        var uuids = [CBUUID]()
-        _ = strs.reduce(uuids, combine: { (_, uuidStr) -> [CBUUID] in
+        let UUIDs = strs.reduce([CBUUID](), combine: { (uuids, uuidStr) -> [CBUUID] in
             let uuid = CBUUID.init(string: uuidStr)
-            uuids.append(uuid)
-            return uuids
+            return uuids + [uuid]
         })
-        return uuids
+        return UUIDs
     }
 }

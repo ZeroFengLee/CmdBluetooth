@@ -85,6 +85,7 @@ public class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
         if retriveServiceIndex == peripheral.services!.count {
             self.isFree = true
             self.completeHandle?()
+            NSNotificationCenter.defaultCenter().postNotificationName(CmdRetriveFinishNotify, object: nil)
         }
     }
     
@@ -99,6 +100,11 @@ public class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
     
     public func peripheral(peripheral: CBPeripheral, didUpdateNotificationStateForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
         
+    }
+    
+    public func peripheral(peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: NSError?) {
+        guard (error == nil) else { return }
+        NSNotificationCenter.defaultCenter().postNotificationName(CmdReadRSSINotify, object: RSSI, userInfo: ["peripheral" : peripheral])
     }
     
     //MARK: - Private Method

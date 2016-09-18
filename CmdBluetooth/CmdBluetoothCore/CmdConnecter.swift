@@ -56,6 +56,7 @@ class CmdConnecter: CentralManagerConnectionDelegate {
     //MARK: CentralManagerConnectionDelegate
     
     func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
+        NSNotificationCenter.defaultCenter().postNotificationName(CmdConnectStateNotify, object: true)
         self.lastPeripheral = peripheral
         self.invalidateTimer()
         
@@ -77,6 +78,7 @@ class CmdConnecter: CentralManagerConnectionDelegate {
     }
     
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+        NSNotificationCenter.defaultCenter().postNotificationName(CmdConnectStateNotify, object: false)
         parser?.connected = false
         if isCancel {
             self.lastPeripheral = nil
