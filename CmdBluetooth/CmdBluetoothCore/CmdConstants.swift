@@ -32,9 +32,9 @@ public let CmdReadRSSINotify = "CmdReadRSSINotify"
 /**
     Parser Error
  */
-public enum CmdParserError: ErrorType {
-    case WrongCharacterUUIDStr
-    case NoPeripheral
+public enum CmdParserError: Error {
+    case wrongCharacterUUIDStr
+    case noPeripheral
 }
 
 

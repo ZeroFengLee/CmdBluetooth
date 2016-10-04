@@ -15,7 +15,7 @@ public protocol ParserDataReceiveDelegate: class, NSObjectProtocol {
      `callback invoked when receive a data from the device`
      `data stream received from the device`
      */
-    func receiveData(data: NSData, peripheral: CBPeripheral, characteristic:CBCharacteristic)
+    func receiveData(_ data: Data, peripheral: CBPeripheral, characteristic:CBCharacteristic)
 }
 /**
     `Parser's delegate,reply to the operation of the peripheral`
@@ -24,7 +24,7 @@ public protocol ParserDelegate: class, NSObjectProtocol, ParserDataReceiveDelega
     /**
      `get the state whether written to success`
      */
-    func didWriteData(peripheral: CBPeripheral, characteristic:CBCharacteristic, error: NSError?)
+    func didWriteData(_ peripheral: CBPeripheral, characteristic:CBCharacteristic, error: NSError?)
 }
 
 /**
@@ -56,7 +56,7 @@ public protocol CmdParserSession: class, NSObjectProtocol {
     /**
         `start to retrive peripheral's services and characteristics`
      */
-    func startRetrivePeripheral(complete: (Void -> Void)?)
+    func startRetrivePeripheral(_ complete: ((Void) -> Void)?)
     
     /**
         `read a characteristic value manually,`
@@ -65,7 +65,7 @@ public protocol CmdParserSession: class, NSObjectProtocol {
      
         - parameter charaStr: characteristic's uuid string
      */
-    func readCharacteristic(characterUUIDStr: String) throws
+    func readCharacteristic(_ characterUUIDStr: String) throws
     
     /**
         `to write the data inside the device with control parameters`
@@ -74,5 +74,5 @@ public protocol CmdParserSession: class, NSObjectProtocol {
         - parameter characterUuidStr: characteristic's uuid string
         - parameter withResponse: true/false
      */
-    func writeData(data: NSData, characterUUIDStr: String, withResponse: Bool) throws
+    func writeData(_ data: Data, characterUUIDStr: String, withResponse: Bool) throws
 }

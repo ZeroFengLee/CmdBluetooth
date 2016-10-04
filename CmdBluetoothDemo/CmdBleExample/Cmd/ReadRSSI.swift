@@ -11,7 +11,7 @@ import Foundation
 class ReadRSSI {
     
     class func readRSSI() {
-        guard let parserSession = CmdCentralManager.manager.parser where parserSession.connected else {
+        guard let parserSession = CmdCentralManager.manager.parser , parserSession.connected else {
             return
         }
         parserSession.peripheral?.readRSSI()

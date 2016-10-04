@@ -21,9 +21,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // open auto connect
         centerManager.autoConnect = true
     }
-    
-    @IBAction func scan(sender: AnyObject) {
-        
+
+    @IBAction func scan(_ sender: UIButton) {
         self.bleList.removeAll()
         centerManager.scanWithServices(nil, duration: 3, discoveryHandle: {
             
@@ -41,31 +40,25 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 }
 
 extension ViewController {
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-
-        return 1
-    }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return bleList.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    @objc(tableView:cellForRowAtIndexPath:) func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cellId = "BLECELL"
-        var cell: UITableViewCell? = tableView.dequeueReusableCellWithIdentifier(cellId)
+        var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: cellId)
         if cell == nil {
-            cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: cellId)
+            cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: cellId)
         }
         cell!.textLabel!.text = bleList[indexPath.row].peripheral.name
         return cell!
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    @objc(tableView:didSelectRowAtIndexPath:) func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         centerManager.connect(bleList[indexPath.row], duration: 10, success: { (central, discovery) in
-
             print("connect success")
         }) { (error) in
             print("connect fail")

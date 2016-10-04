@@ -11,18 +11,18 @@ import CoreBluetooth
 
 class CmdScanner: CentralManagerDiscoveryDelegate {
     
-    typealias DiscoveryHandle = ((discovery: CmdDiscovery) -> Void)
-    typealias CompleteHandle = (Void -> Void)
+    typealias DiscoveryHandle = ((_ discovery: CmdDiscovery) -> Void)
+    typealias CompleteHandle = ((Void) -> Void)
     
     var centralManager: CBCentralManager?
     var servicesUUIDStrs: [String]?
-    private var scanTimer: NSTimer?
-    private var discoveryHandle: DiscoveryHandle?
-    private var completeHandle: CompleteHandle?
+    fileprivate var scanTimer: Timer?
+    fileprivate var discoveryHandle: DiscoveryHandle?
+    fileprivate var completeHandle: CompleteHandle?
     /**
         no central manager -> return false
      */
-    func scanWithDuration(duration: NSTimeInterval, discoveryHandle: DiscoveryHandle?, completeHandle: CompleteHandle?) -> Bool {
+    func scanWithDuration(_ duration: TimeInterval, discoveryHandle: DiscoveryHandle?, completeHandle: CompleteHandle?) -> Bool {
         guard let centralManager = centralManager else {
             return false
         }
@@ -30,13 +30,13 @@ class CmdScanner: CentralManagerDiscoveryDelegate {
         self.discoveryHandle = discoveryHandle
         self.completeHandle = completeHandle
         invalidateTimer()
-        scanTimer = NSTimer.scheduledTimerWithTimeInterval(duration, target: self, selector: #selector(CmdScanner.timeOut), userInfo: nil, repeats: false)
+        scanTimer = Timer.scheduledTimer(timeInterval: duration, target: self, selector: #selector(CmdScanner.timeOut), userInfo: nil, repeats: false)
         let scanOption = [CBCentralManagerScanOptionAllowDuplicatesKey : false]
-        centralManager.scanForPeripheralsWithServices(stringsToUUIDs(servicesUUIDStrs), options: scanOption)
+        centralManager.scanForPeripherals(withServices: stringsToUUIDs(servicesUUIDStrs), options: scanOption)
         
-        if let connectedDiscover = retriveConnectedDiscovery(), discoveryHandle = self.discoveryHandle {
+        if let connectedDiscover = retriveConnectedDiscovery(), let discoveryHandle = self.discoveryHandle {
             _ = connectedDiscover.map{
-                discoveryHandle(discovery: $0)
+                discoveryHandle($0)
             }
         }
         return true
@@ -48,24 +48,24 @@ class CmdScanner: CentralManagerDiscoveryDelegate {
     
     //MARK: CentralManagerDiscoveryDelegate -
     
-    func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String: AnyObject], RSSI: NSNumber) {
+    func centralManager(_ central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String: AnyObject], RSSI: NSNumber) {
         guard let discoveryHandle = self.discoveryHandle else { return }
-        dispatch_async(dispatch_get_main_queue()) {
-            let discovery = CmdDiscovery(peripheral: peripheral, advertisementData: advertisementData, RSSI: RSSI.intValue)
-            discoveryHandle(discovery: discovery)
+        DispatchQueue.main.async {
+            let discovery = CmdDiscovery(peripheral: peripheral, advertisementData: advertisementData, RSSI: RSSI.int32Value)
+            discoveryHandle(discovery)
         }
     }
     
     //MARK: Private Method -
     
-    @objc private func timeOut() {
+    @objc fileprivate func timeOut() {
         endScan()
     }
     
-    private func retriveConnectedDiscovery() -> [CmdDiscovery]? {
+    fileprivate func retriveConnectedDiscovery() -> [CmdDiscovery]? {
         let servicesUUIDs = stringsToUUIDs(servicesUUIDStrs)
-        if let centralManager = centralManager, servicesUUIDs = servicesUUIDs {
-            let discoverys = centralManager.retrieveConnectedPeripheralsWithServices(servicesUUIDs).map{
+        if let centralManager = centralManager, let servicesUUIDs = servicesUUIDs {
+            let discoverys = centralManager.retrieveConnectedPeripherals(withServices: servicesUUIDs).map{
                 return CmdDiscovery(peripheral: $0, advertisementData: nil, RSSI: -1)
             }
             return discoverys
@@ -73,7 +73,7 @@ class CmdScanner: CentralManagerDiscoveryDelegate {
         return nil
     }
     
-    private func endScan() {
+    fileprivate func endScan() {
         invalidateTimer()
         centralManager?.stopScan()
         if let completeHandle = completeHandle {
@@ -83,14 +83,14 @@ class CmdScanner: CentralManagerDiscoveryDelegate {
         discoveryHandle = nil
     }
     
-    private func invalidateTimer() {
+    fileprivate func invalidateTimer() {
         scanTimer?.invalidate()
         self.scanTimer = nil
     }
     
-    private func stringsToUUIDs(strs:[String]?) -> [CBUUID]?{
+    fileprivate func stringsToUUIDs(_ strs:[String]?) -> [CBUUID]?{
         guard let strs = strs else { return nil }
-        let UUIDs = strs.reduce([CBUUID](), combine: { (uuids, uuidStr) -> [CBUUID] in
+        let UUIDs = strs.reduce([CBUUID](), { (uuids, uuidStr) -> [CBUUID] in
             let uuid = CBUUID.init(string: uuidStr)
             return uuids + [uuid]
         })

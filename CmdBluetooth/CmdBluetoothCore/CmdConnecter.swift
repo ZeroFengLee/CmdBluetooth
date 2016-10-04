@@ -11,40 +11,40 @@ import CoreBluetooth
 
 class CmdConnecter: CentralManagerConnectionDelegate {
     
-    typealias SuccessHandle = ((central: CBCentralManager, peripheral: CBPeripheral) -> Void)
-    typealias FailHandle = ((error: NSError?) -> Void)
+    typealias SuccessHandle = ((_ central: CBCentralManager, _ peripheral: CBPeripheral) -> Void)
+    typealias FailHandle = ((_ error: NSError?) -> Void)
     
     var centralManager: CBCentralManager?
     var discovery: CmdDiscovery?
     var parser: CmdParserSession?
     var autoConnect = false
-    private var connectTimer: NSTimer?
-    private var successHandle: SuccessHandle?
-    private var failHandle: FailHandle?
-    private var lastPeripheral: CBPeripheral?
-    private var isCancel = false
+    fileprivate var connectTimer: Timer?
+    fileprivate var successHandle: SuccessHandle?
+    fileprivate var failHandle: FailHandle?
+    fileprivate var lastPeripheral: CBPeripheral?
+    fileprivate var isCancel = false
     
     /**
      no central manager, discovery -> return false
      */
-    func connectWithDuration(duration: NSTimeInterval, connectSuccess: SuccessHandle?, failHandle:FailHandle?) -> Bool {
-        guard let centralManager = self.centralManager, discovery = self.discovery else {
+    func connectWithDuration(_ duration: TimeInterval, connectSuccess: SuccessHandle?, failHandle:FailHandle?) -> Bool {
+        guard let centralManager = self.centralManager, let discovery = self.discovery else {
             return false
         }
         self.successHandle = connectSuccess
         self.failHandle = failHandle
         invalidateTimer()
-        connectTimer = NSTimer.scheduledTimerWithTimeInterval(duration, target: self, selector: #selector(CmdConnecter.timeOut), userInfo: nil, repeats: false)
+        connectTimer = Timer.scheduledTimer(timeInterval: duration, target: self, selector: #selector(CmdConnecter.timeOut), userInfo: nil, repeats: false)
         if let lastPeripheral = lastPeripheral {
             self.cancel(centralManager, peripheral: lastPeripheral)
         }
-        centralManager.connectPeripheral(discovery.peripheral, options: nil)
+        centralManager.connect(discovery.peripheral, options: nil)
         return true
     }
     
     func connectLastPeripheral() {
-        if let centralManager =  centralManager, lastPeripheral = lastPeripheral {
-            centralManager.connectPeripheral(lastPeripheral, options: nil)
+        if let centralManager =  centralManager, let lastPeripheral = lastPeripheral {
+            centralManager.connect(lastPeripheral, options: nil)
         }
     }
     
@@ -55,8 +55,8 @@ class CmdConnecter: CentralManagerConnectionDelegate {
     
     //MARK: CentralManagerConnectionDelegate
     
-    func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
-        NSNotificationCenter.defaultCenter().postNotificationName(CmdConnectStateNotify, object: true)
+    func centralManager(_ central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: CmdConnectStateNotify), object: true)
         self.lastPeripheral = peripheral
         self.invalidateTimer()
         
@@ -66,19 +66,19 @@ class CmdConnecter: CentralManagerConnectionDelegate {
         parser.peripheral = peripheral
         parser.startRetrivePeripheral{ [weak self] _ in
             guard let `self` = self else { return }
-            self.successHandle?(central: central, peripheral: peripheral)
+            self.successHandle?(central, peripheral)
         }
     }
     
-    func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+    func centralManager(_ central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
         if let failHandle = self.failHandle {
-            failHandle(error: error)
+            failHandle(error)
         }
         print(error)
     }
     
-    func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
-        NSNotificationCenter.defaultCenter().postNotificationName(CmdConnectStateNotify, object: false)
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: CmdConnectStateNotify), object: false)
         parser?.connected = false
         if isCancel {
             self.lastPeripheral = nil
@@ -86,29 +86,29 @@ class CmdConnecter: CentralManagerConnectionDelegate {
             return
         }
         if autoConnect {
-            central.connectPeripheral(peripheral, options: nil)
+            central.connect(peripheral, options: nil)
         }
     }
     
     //MARK: Private Method
     
-    @objc private func timeOut() {
+    @objc fileprivate func timeOut() {
         if let failHandle = self.failHandle {
             let timeoutError = NSError(domain: "com.zero.ble", code: -1008, userInfo: ["msg" : "connect timeout"])
-            failHandle(error: timeoutError)
+            failHandle(timeoutError)
         }
         self.disConnect()
     }
     
-    private func cancel(central: CBCentralManager?, peripheral: CBPeripheral?) {
+    fileprivate func cancel(_ central: CBCentralManager?, peripheral: CBPeripheral?) {
         isCancel = true
         self.invalidateTimer()
-        if let centralManager = centralManager, peripheral = peripheral {
+        if let centralManager = centralManager, let peripheral = peripheral {
             centralManager.cancelPeripheralConnection(peripheral)
         }
     }
     
-    private func invalidateTimer() {
+    fileprivate func invalidateTimer() {
         connectTimer?.invalidate()
         self.connectTimer = nil
     }

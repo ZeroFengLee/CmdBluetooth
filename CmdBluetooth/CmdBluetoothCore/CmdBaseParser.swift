@@ -10,33 +10,33 @@
 import Foundation
 import CoreBluetooth
 
-public class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
+open class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
     
-    public var isFree = false
-    public var connected = false
-    private var retriveServiceIndex = 0
-    private var delegate:ParserDelegate?
-    private var comingDataMonitor: ParserDataReceiveDelegate?
-    private var curPeripheral:CBPeripheral?
-    private lazy var containCharacteristics = [CBCharacteristic]()
-    private var completeHandle: (Void -> Void)?
+    open var isFree = false
+    open var connected = false
+    fileprivate var retriveServiceIndex = 0
+    fileprivate var delegate:ParserDelegate?
+    fileprivate var comingDataMonitor: ParserDataReceiveDelegate?
+    fileprivate var curPeripheral:CBPeripheral?
+    fileprivate lazy var containCharacteristics = [CBCharacteristic]()
+    fileprivate var completeHandle: ((Void) -> Void)?
 
-    weak public var parserDelegate: ParserDelegate? {
+    weak open var parserDelegate: ParserDelegate? {
         get { return delegate }
         set { delegate = newValue }
     }
     
-    weak public var dataComingMonitor: ParserDataReceiveDelegate? {
+    weak open var dataComingMonitor: ParserDataReceiveDelegate? {
         get { return self.comingDataMonitor }
         set { self.comingDataMonitor = newValue }
     }
     
-    public var peripheral: CBPeripheral? {
+    open var peripheral: CBPeripheral? {
         get { return curPeripheral }
         set { curPeripheral = newValue }
     }
     
-    public func startRetrivePeripheral(complete: (Void -> Void)?) {
+    open func startRetrivePeripheral(_ complete: ((Void) -> Void)?) {
         retriveServiceIndex = 0
         guard let curPeripheral = curPeripheral else { complete?(); return }
         curPeripheral.delegate = self
@@ -44,20 +44,20 @@ public class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
         self.completeHandle = complete
     }
     
-    public func writeData(data: NSData, characterUUIDStr: String, withResponse: Bool) throws {
+    open func writeData(_ data: Data, characterUUIDStr: String, withResponse: Bool) throws {
         do {
             let (per, chara) = try self.prepareForAction(characterUUIDStr)
-            let type: CBCharacteristicWriteType = withResponse ? .WithResponse : .WithoutResponse
-            per.writeValue(data, forCharacteristic: chara, type: type)
+            let type: CBCharacteristicWriteType = withResponse ? .withResponse : .withoutResponse
+            per.writeValue(data, for: chara, type: type)
         } catch let error {
             throw error
         }
     }
     
-    public func readCharacteristic(characterUUIDStr: String) throws {
+    open func readCharacteristic(_ characterUUIDStr: String) throws {
         do {
             let (per, chara) = try self.prepareForAction(characterUUIDStr)
-            per.readValueForCharacteristic(chara)
+            per.readValue(for: chara)
         } catch let error {
             throw error
         }
@@ -65,18 +65,18 @@ public class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
     
     //MARK: - CBPeripheralDelegate
     
-    public func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+    open func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         guard let services = peripheral.services else { return }
         _ = services.map {
-            peripheral.discoverCharacteristics(nil, forService: $0)
+            peripheral.discoverCharacteristics(nil, for: $0)
         }
     }
     
-    public func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?)  {
+    open func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?)  {
         guard let characteristics = service.characteristics else { return }
         containCharacteristics = characteristics.reduce(containCharacteristics) {
-            if $1.properties.contains(CBCharacteristicProperties.Notify) {
-                peripheral.setNotifyValue(true, forCharacteristic: $1)
+            if $1.properties.contains(CBCharacteristicProperties.notify) {
+                peripheral.setNotifyValue(true, for: $1)
             }
             return $0 + [$1]
         }
@@ -85,43 +85,43 @@ public class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
         if retriveServiceIndex == peripheral.services!.count {
             self.isFree = true
             self.completeHandle?()
-            NSNotificationCenter.defaultCenter().postNotificationName(CmdRetriveFinishNotify, object: nil)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: CmdRetriveFinishNotify), object: nil)
         }
     }
     
-    public func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    open func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         dataComingMonitor?.receiveData(characteristic.value!, peripheral: peripheral, characteristic: characteristic)
         delegate?.receiveData(characteristic.value!, peripheral: peripheral, characteristic: characteristic)
     }
     
-    public func peripheral(peripheral: CBPeripheral, didWriteValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
-        delegate?.didWriteData(peripheral, characteristic: characteristic, error: error)
+    open func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
+        delegate?.didWriteData(peripheral, characteristic: characteristic, error: error as NSError?)
     }
     
-    public func peripheral(peripheral: CBPeripheral, didUpdateNotificationStateForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    open func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
         
     }
     
-    public func peripheral(peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: NSError?) {
+    open func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
         guard (error == nil) else { return }
-        NSNotificationCenter.defaultCenter().postNotificationName(CmdReadRSSINotify, object: RSSI, userInfo: ["peripheral" : peripheral])
+        NotificationCenter.default.post(name: Notification.Name(rawValue: CmdReadRSSINotify), object: RSSI, userInfo: ["peripheral" : peripheral])
     }
     
     //MARK: - Private Method
     
-    private func prepareForAction(UUIDStr: String) throws -> (CBPeripheral, CBCharacteristic) {
+    fileprivate func prepareForAction(_ UUIDStr: String) throws -> (CBPeripheral, CBCharacteristic) {
         guard let curPeripheral = curPeripheral else {
-            throw CmdParserError.NoPeripheral
+            throw CmdParserError.noPeripheral
         }
         
         let flatResults = containCharacteristics.flatMap { (chara) -> CBCharacteristic? in
-            if chara.UUID.UUIDString.lowercaseString == UUIDStr.lowercaseString {
+            if chara.uuid.uuidString.lowercased() == UUIDStr.lowercased() {
                 return chara
             }
             return nil
         }
         if flatResults.count == 0 {
-            throw CmdParserError.WrongCharacterUUIDStr
+            throw CmdParserError.wrongCharacterUUIDStr
         }
         
         return (curPeripheral, flatResults.first!)

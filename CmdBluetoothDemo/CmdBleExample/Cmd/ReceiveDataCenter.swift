@@ -10,8 +10,11 @@ import Foundation
 import CoreBluetooth
 
 class ReceiveDataCenter: NSObject, ParserDataReceiveDelegate {
-    
-    func receiveData(data: NSData, peripheral: CBPeripheral, characteristic: CBCharacteristic) {
-        print("receive data: |------| " + "\(characteristic.UUID.UUIDString) |-----|" + "\(data)")
+    /**
+     `callback invoked when receive a data from the device`
+     `data stream received from the device`
+     */
+    public func receiveData(_ data: Data, peripheral: CBPeripheral, characteristic: CBCharacteristic) {
+        print("receive data: |------| " + "\(characteristic.uuid.uuidString) |-----|" + "\(data)")
     }
 }

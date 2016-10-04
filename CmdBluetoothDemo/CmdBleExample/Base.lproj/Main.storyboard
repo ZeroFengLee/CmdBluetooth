@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="u2J-CS-mEw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="u2J-CS-mEw">
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -14,25 +14,24 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JvB-LH-ZTO">
-                                <rect key="frame" x="0.0" y="64" width="320" height="48"/>
-                                <color key="backgroundColor" red="0.36864123380000002" green="0.58126183710000001" blue="0.46746527980000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.36864123380000002" green="0.58126183710000001" blue="0.46746527980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="pYh-N9-s93"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Start Ble">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <segue destination="Yw6-kC-viz" kind="show" id="M2x-xG-8gh"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="JvB-LH-ZTO" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="0Re-Sg-maG"/>
                             <constraint firstAttribute="trailing" secondItem="JvB-LH-ZTO" secondAttribute="trailing" id="ayI-6f-ffH"/>
@@ -43,7 +42,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="813" y="1049"/>
+            <point key="canvasLocation" x="1056.8" y="1047.5262368815593"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="kPM-5I-pnF">
@@ -54,33 +53,31 @@
                         <viewControllerLayoutGuide type="bottom" id="71Z-Ud-5BT"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Da0-1K-dI6">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="QQa-g4-dfp">
-                                <rect key="frame" x="0.0" y="114" width="320" height="454"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="Yw6-kC-viz" id="hkO-9p-kPB"/>
-                                    <outlet property="delegate" destination="Yw6-kC-viz" id="MiW-xC-C6f"/>
-                                </connections>
-                            </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ta0-qs-R1i">
-                                <rect key="frame" x="0.0" y="64" width="320" height="50"/>
-                                <color key="backgroundColor" red="0.36864123380000002" green="0.58126183710000001" blue="0.46746527980000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.36864123380000002" green="0.58126183710000001" blue="0.46746527980000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="gpF-Gw-Ijq"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Scan">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="scan:" destination="Yw6-kC-viz" eventType="touchUpInside" id="d1E-Ue-JkJ"/>
+                                    <action selector="scan:" destination="Yw6-kC-viz" eventType="touchUpInside" id="lfe-dz-gp5"/>
                                 </connections>
                             </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="QQa-g4-dfp">
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Yw6-kC-viz" id="hkO-9p-kPB"/>
+                                    <outlet property="delegate" destination="Yw6-kC-viz" id="MiW-xC-C6f"/>
+                                </connections>
+                            </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="QQa-g4-dfp" firstAttribute="leading" secondItem="Da0-1K-dI6" secondAttribute="leading" id="6P1-FM-ukH"/>
                             <constraint firstAttribute="trailing" secondItem="QQa-g4-dfp" secondAttribute="trailing" id="E2f-US-sUc"/>
@@ -97,14 +94,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qft-3t-l2F" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1189" y="1049"/>
+            <point key="canvasLocation" x="1741.5999999999999" y="1047.5262368815593"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="PNe-w5-CFJ">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="u2J-CS-mEw" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="1kb-Mo-GIc">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

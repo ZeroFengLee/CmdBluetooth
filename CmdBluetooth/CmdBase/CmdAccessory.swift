@@ -14,7 +14,7 @@ class CmdAccessory: NSObject {
         `BCD转码`
         `补齐16位
      */
-    class func stringToBytesWithCRC(string: String) -> NSData? {
+    class func stringToBytesWithCRC(_ string: String) -> Data? {
         
         let stringLength = string.characters.count
         
@@ -29,12 +29,12 @@ class CmdAccessory: NSObject {
             if index % 2 != 0 {
                 continue
             }
-            let range:Range = string.startIndex.advancedBy(index)..<string.startIndex.advancedBy(index + 2)
-            let byteStr = string.substringWithRange(range)
+            let range:Range = string.characters.index(string.startIndex, offsetBy: index)..<string.characters.index(string.startIndex, offsetBy: index + 2)
+            let byteStr = string.substring(with: range)
             
-            let scanner = NSScanner(string: byteStr)
+            let scanner = Scanner(string: byteStr)
             var byteInt: UInt32 = 0
-            scanner.scanHexInt(&byteInt)
+            scanner.scanHexInt32(&byteInt)
             
             crc += UInt16(byteInt)
             bytes.append(UInt8(byteInt))
@@ -48,6 +48,6 @@ class CmdAccessory: NSObject {
         
         bytes.append(UInt8(crc & 0xff))
         
-        return NSData(bytes: bytes, length: 16)
+        return Data(bytes: UnsafePointer<UInt8>(bytes), count: 16)
     }
 }
