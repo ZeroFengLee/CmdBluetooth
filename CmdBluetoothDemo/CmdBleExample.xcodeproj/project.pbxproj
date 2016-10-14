@@ -7,35 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1C4777E91D8E725800A0D2B7 /* CmdAccessory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4777DF1D8E725800A0D2B7 /* CmdAccessory.swift */; };
-		1C4777EA1D8E725800A0D2B7 /* CmdBaseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4777E11D8E725800A0D2B7 /* CmdBaseParser.swift */; };
-		1C4777EB1D8E725800A0D2B7 /* CmdCentralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4777E21D8E725800A0D2B7 /* CmdCentralManager.swift */; };
-		1C4777EC1D8E725800A0D2B7 /* CmdCentralProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4777E31D8E725800A0D2B7 /* CmdCentralProxy.swift */; };
-		1C4777ED1D8E725800A0D2B7 /* CmdConnecter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4777E41D8E725800A0D2B7 /* CmdConnecter.swift */; };
-		1C4777EE1D8E725800A0D2B7 /* CmdConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4777E51D8E725800A0D2B7 /* CmdConstants.swift */; };
-		1C4777EF1D8E725800A0D2B7 /* CmdDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4777E61D8E725800A0D2B7 /* CmdDiscovery.swift */; };
-		1C4777F01D8E725800A0D2B7 /* CmdParserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4777E71D8E725800A0D2B7 /* CmdParserSession.swift */; };
-		1C4777F11D8E725800A0D2B7 /* CmdScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4777E81D8E725800A0D2B7 /* CmdScanner.swift */; };
+		1C2536B31DB083FD0037CAE8 /* CmdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2536B21DB083FD0037CAE8 /* CmdViewController.swift */; };
+		1C2536B51DB08E320037CAE8 /* ReadBattery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2536B41DB08E320037CAE8 /* ReadBattery.swift */; };
+		1C2536B91DB08FC40037CAE8 /* MyParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2536B71DB08FC40037CAE8 /* MyParser.swift */; };
+		1C2536BA1DB08FC40037CAE8 /* ReceiveDataCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2536B81DB08FC40037CAE8 /* ReceiveDataCenter.swift */; };
+		1C2536BE1DB096580037CAE8 /* SynTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2536BD1DB096580037CAE8 /* SynTime.swift */; };
 		1CDAA6A61D5826A50052DFCB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CDAA6A51D5826A50052DFCB /* AppDelegate.swift */; };
 		1CDAA6A81D5826A50052DFCB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CDAA6A71D5826A50052DFCB /* ViewController.swift */; };
 		1CDAA6AB1D5826A50052DFCB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CDAA6A91D5826A50052DFCB /* Main.storyboard */; };
 		1CDAA6AD1D5826A50052DFCB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1CDAA6AC1D5826A50052DFCB /* Assets.xcassets */; };
 		1CDAA6B01D5826A50052DFCB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CDAA6AE1D5826A50052DFCB /* LaunchScreen.storyboard */; };
-		1CDAA6D01D5836A00052DFCB /* PlanetoidParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CDAA6CF1D5836A00052DFCB /* PlanetoidParser.swift */; };
 		1CDE0BF21D79289B006E47B3 /* ReadRSSI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CDE0BF11D79289B006E47B3 /* ReadRSSI.swift */; };
-		1CDE0BF41D7943D6006E47B3 /* ReceiveDataCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CDE0BF31D7943D6006E47B3 /* ReceiveDataCenter.swift */; };
+		D57ED5234EF3EA26A967F4B2 /* Pods_CmdBleExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 643F04A12DB946EF260BC3B5 /* Pods_CmdBleExample.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1C4777DF1D8E725800A0D2B7 /* CmdAccessory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CmdAccessory.swift; sourceTree = "<group>"; };
-		1C4777E11D8E725800A0D2B7 /* CmdBaseParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CmdBaseParser.swift; sourceTree = "<group>"; };
-		1C4777E21D8E725800A0D2B7 /* CmdCentralManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CmdCentralManager.swift; sourceTree = "<group>"; };
-		1C4777E31D8E725800A0D2B7 /* CmdCentralProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CmdCentralProxy.swift; sourceTree = "<group>"; };
-		1C4777E41D8E725800A0D2B7 /* CmdConnecter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CmdConnecter.swift; sourceTree = "<group>"; };
-		1C4777E51D8E725800A0D2B7 /* CmdConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CmdConstants.swift; sourceTree = "<group>"; };
-		1C4777E61D8E725800A0D2B7 /* CmdDiscovery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CmdDiscovery.swift; sourceTree = "<group>"; };
-		1C4777E71D8E725800A0D2B7 /* CmdParserSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CmdParserSession.swift; sourceTree = "<group>"; };
-		1C4777E81D8E725800A0D2B7 /* CmdScanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CmdScanner.swift; sourceTree = "<group>"; };
+		1C2536B21DB083FD0037CAE8 /* CmdViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CmdViewController.swift; sourceTree = "<group>"; };
+		1C2536B41DB08E320037CAE8 /* ReadBattery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadBattery.swift; sourceTree = "<group>"; };
+		1C2536B71DB08FC40037CAE8 /* MyParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyParser.swift; sourceTree = "<group>"; };
+		1C2536B81DB08FC40037CAE8 /* ReceiveDataCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReceiveDataCenter.swift; sourceTree = "<group>"; };
+		1C2536BD1DB096580037CAE8 /* SynTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SynTime.swift; sourceTree = "<group>"; };
 		1CDAA6A21D5826A50052DFCB /* CmdBleExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CmdBleExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CDAA6A51D5826A50052DFCB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1CDAA6A71D5826A50052DFCB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -43,9 +34,10 @@
 		1CDAA6AC1D5826A50052DFCB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1CDAA6AF1D5826A50052DFCB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1CDAA6B11D5826A50052DFCB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1CDAA6CF1D5836A00052DFCB /* PlanetoidParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanetoidParser.swift; sourceTree = "<group>"; };
 		1CDE0BF11D79289B006E47B3 /* ReadRSSI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadRSSI.swift; sourceTree = "<group>"; };
-		1CDE0BF31D7943D6006E47B3 /* ReceiveDataCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReceiveDataCenter.swift; sourceTree = "<group>"; };
+		3FA315D749AAF10848F02BB8 /* Pods-CmdBleExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CmdBleExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-CmdBleExample/Pods-CmdBleExample.release.xcconfig"; sourceTree = "<group>"; };
+		643F04A12DB946EF260BC3B5 /* Pods_CmdBleExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CmdBleExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0C39C3EDE05B2003FCD42E3 /* Pods-CmdBleExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CmdBleExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CmdBleExample/Pods-CmdBleExample.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,43 +45,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D57ED5234EF3EA26A967F4B2 /* Pods_CmdBleExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1C4777DD1D8E725800A0D2B7 /* CmdBluetooth */ = {
+		1C2536B61DB08FAA0037CAE8 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
-				1C4777DE1D8E725800A0D2B7 /* CmdBase */,
-				1C4777E01D8E725800A0D2B7 /* CmdBluetoothCore */,
+				1C2536B71DB08FC40037CAE8 /* MyParser.swift */,
+				1C2536B81DB08FC40037CAE8 /* ReceiveDataCenter.swift */,
 			);
-			name = CmdBluetooth;
-			path = ../../CmdBluetooth;
-			sourceTree = "<group>";
-		};
-		1C4777DE1D8E725800A0D2B7 /* CmdBase */ = {
-			isa = PBXGroup;
-			children = (
-				1C4777DF1D8E725800A0D2B7 /* CmdAccessory.swift */,
-			);
-			path = CmdBase;
-			sourceTree = "<group>";
-		};
-		1C4777E01D8E725800A0D2B7 /* CmdBluetoothCore */ = {
-			isa = PBXGroup;
-			children = (
-				1C4777E11D8E725800A0D2B7 /* CmdBaseParser.swift */,
-				1C4777E21D8E725800A0D2B7 /* CmdCentralManager.swift */,
-				1C4777E31D8E725800A0D2B7 /* CmdCentralProxy.swift */,
-				1C4777E41D8E725800A0D2B7 /* CmdConnecter.swift */,
-				1C4777E51D8E725800A0D2B7 /* CmdConstants.swift */,
-				1C4777E61D8E725800A0D2B7 /* CmdDiscovery.swift */,
-				1C4777E71D8E725800A0D2B7 /* CmdParserSession.swift */,
-				1C4777E81D8E725800A0D2B7 /* CmdScanner.swift */,
-			);
-			path = CmdBluetoothCore;
+			path = Basic;
 			sourceTree = "<group>";
 		};
 		1CDAA6991D5826A50052DFCB = {
@@ -97,6 +66,8 @@
 			children = (
 				1CDAA6A41D5826A50052DFCB /* CmdBleExample */,
 				1CDAA6A31D5826A50052DFCB /* Products */,
+				789D06A09B855CEEBE067E6A /* Pods */,
+				92402DE669AF58AE298A07C1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -111,10 +82,10 @@
 		1CDAA6A41D5826A50052DFCB /* CmdBleExample */ = {
 			isa = PBXGroup;
 			children = (
-				1C4777DD1D8E725800A0D2B7 /* CmdBluetooth */,
 				1CDAA6CE1D5836910052DFCB /* Cmd */,
 				1CDAA6A51D5826A50052DFCB /* AppDelegate.swift */,
 				1CDAA6A71D5826A50052DFCB /* ViewController.swift */,
+				1C2536B21DB083FD0037CAE8 /* CmdViewController.swift */,
 				1CDAA6A91D5826A50052DFCB /* Main.storyboard */,
 				1CDAA6AC1D5826A50052DFCB /* Assets.xcassets */,
 				1CDAA6AE1D5826A50052DFCB /* LaunchScreen.storyboard */,
@@ -126,11 +97,29 @@
 		1CDAA6CE1D5836910052DFCB /* Cmd */ = {
 			isa = PBXGroup;
 			children = (
-				1CDE0BF31D7943D6006E47B3 /* ReceiveDataCenter.swift */,
-				1CDAA6CF1D5836A00052DFCB /* PlanetoidParser.swift */,
+				1C2536B61DB08FAA0037CAE8 /* Basic */,
 				1CDE0BF11D79289B006E47B3 /* ReadRSSI.swift */,
+				1C2536B41DB08E320037CAE8 /* ReadBattery.swift */,
+				1C2536BD1DB096580037CAE8 /* SynTime.swift */,
 			);
 			path = Cmd;
+			sourceTree = "<group>";
+		};
+		789D06A09B855CEEBE067E6A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A0C39C3EDE05B2003FCD42E3 /* Pods-CmdBleExample.debug.xcconfig */,
+				3FA315D749AAF10848F02BB8 /* Pods-CmdBleExample.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		92402DE669AF58AE298A07C1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				643F04A12DB946EF260BC3B5 /* Pods_CmdBleExample.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,9 +129,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1CDAA6B41D5826A50052DFCB /* Build configuration list for PBXNativeTarget "CmdBleExample" */;
 			buildPhases = (
+				9FC68B6E6E59C3531904DFC4 /* [CP] Check Pods Manifest.lock */,
 				1CDAA69E1D5826A50052DFCB /* Sources */,
 				1CDAA69F1D5826A50052DFCB /* Frameworks */,
 				1CDAA6A01D5826A50052DFCB /* Resources */,
+				6B1355123CB186CF4167BA99 /* [CP] Embed Pods Frameworks */,
+				44221B7DD7EDFA3B27CB5CFE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -201,25 +193,67 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		44221B7DD7EDFA3B27CB5CFE /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CmdBleExample/Pods-CmdBleExample-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6B1355123CB186CF4167BA99 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CmdBleExample/Pods-CmdBleExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9FC68B6E6E59C3531904DFC4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1CDAA69E1D5826A50052DFCB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1CDE0BF41D7943D6006E47B3 /* ReceiveDataCenter.swift in Sources */,
-				1CDAA6D01D5836A00052DFCB /* PlanetoidParser.swift in Sources */,
+				1C2536B51DB08E320037CAE8 /* ReadBattery.swift in Sources */,
+				1C2536BE1DB096580037CAE8 /* SynTime.swift in Sources */,
 				1CDAA6A81D5826A50052DFCB /* ViewController.swift in Sources */,
-				1C4777EC1D8E725800A0D2B7 /* CmdCentralProxy.swift in Sources */,
-				1C4777EF1D8E725800A0D2B7 /* CmdDiscovery.swift in Sources */,
+				1C2536B31DB083FD0037CAE8 /* CmdViewController.swift in Sources */,
 				1CDE0BF21D79289B006E47B3 /* ReadRSSI.swift in Sources */,
-				1C4777EB1D8E725800A0D2B7 /* CmdCentralManager.swift in Sources */,
-				1C4777F01D8E725800A0D2B7 /* CmdParserSession.swift in Sources */,
-				1C4777EE1D8E725800A0D2B7 /* CmdConstants.swift in Sources */,
-				1C4777EA1D8E725800A0D2B7 /* CmdBaseParser.swift in Sources */,
-				1C4777E91D8E725800A0D2B7 /* CmdAccessory.swift in Sources */,
+				1C2536BA1DB08FC40037CAE8 /* ReceiveDataCenter.swift in Sources */,
+				1C2536B91DB08FC40037CAE8 /* MyParser.swift in Sources */,
 				1CDAA6A61D5826A50052DFCB /* AppDelegate.swift in Sources */,
-				1C4777ED1D8E725800A0D2B7 /* CmdConnecter.swift in Sources */,
-				1C4777F11D8E725800A0D2B7 /* CmdScanner.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,6 +366,7 @@
 		};
 		1CDAA6B51D5826A50052DFCB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A0C39C3EDE05B2003FCD42E3 /* Pods-CmdBleExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 4K4Q9JA95Y;
@@ -346,6 +381,7 @@
 		};
 		1CDAA6B61D5826A50052DFCB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3FA315D749AAF10848F02BB8 /* Pods-CmdBleExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 4K4Q9JA95Y;

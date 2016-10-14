@@ -1,0 +1,12 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+use_frameworks!
+
+def pro_pods
+swift_version = "3.0"
+    pod 'CmdBluetooth', '~> 0.1'
+end
+
+target 'CmdBleExample' do
+    pro_pods
+end

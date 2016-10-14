@@ -7,22 +7,23 @@
 //
 
 import Foundation
+import CmdBluetooth
 
-class PlanetoidParser: CmdBaseParser {
-
-    static let readNotifyBatteryCharacterUUIDStr = "2A19"
+class MyParser: CmdBaseParser {
+    
+    static let writeUUIDStr = "FFF1"
     
     /**
         define types for writing data to BLE device, like this
      */
-    func writeDataWithResponse(data: NSData) {
-        
+    func writeDataWithResponse(_ data: Data) {
+        do {
+            try super.writeData(data, characterUUIDStr: MyParser.writeUUIDStr, withResponse: true)
+        } catch let error {
+            print("[Error: ]__Write Data Error    " + "\(error)")
+        }
     }
-    
-    func writeDataWithoutResponse(data: NSData) {
-        
-    }
-    
+
     func readData(characterUUIDStr: String) {
         do {
             try super.readCharacteristic(characterUUIDStr)

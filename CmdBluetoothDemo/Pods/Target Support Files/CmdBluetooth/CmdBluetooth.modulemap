@@ -1,0 +1,6 @@
+framework module CmdBluetooth {
+  umbrella header "CmdBluetooth-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -8,8 +8,9 @@
 
 import UIKit
 import CoreBluetooth
+import CmdBluetooth
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController {
 
     var bleList = [CmdDiscovery]()
     let centerManager = CmdCentralManager.manager
@@ -39,13 +40,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 }
 
-extension ViewController {
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return bleList.count
     }
     
-    @objc(tableView:cellForRowAtIndexPath:) func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cellId = "BLECELL"
         var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: cellId)
@@ -56,13 +57,18 @@ extension ViewController {
         return cell!
     }
     
-    @objc(tableView:didSelectRowAtIndexPath:) func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        centerManager.connect(bleList[indexPath.row], duration: 10, success: { (central, discovery) in
-            print("connect success")
-        }) { (error) in
-            print("connect fail")
-        }
+        centerManager.connect(bleList[indexPath.row], duration: 10, success: { (central, peripheral) in
+            DispatchQueue.main.async {
+                print("connect success")
+                self.performSegue(withIdentifier: "CmdSeg", sender: nil)
+            }
+            }, fail: { (error) in
+                DispatchQueue.main.async {
+                    print("connect fail")
+                }
+        })
     }
 }
 

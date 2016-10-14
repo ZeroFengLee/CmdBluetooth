@@ -1,0 +1,12 @@
+PODS:
+  - CmdBluetooth (0.1)
+
+DEPENDENCIES:
+  - CmdBluetooth (~> 0.1)
+
+SPEC CHECKSUMS:
+  CmdBluetooth: d0c2d574a1813d4454ba535a43be433cf3e4f3d9
+
+PODFILE CHECKSUM: 42bdb7b7ccaa6996df25ff84c46c84a4c6fb42a7
+
+COCOAPODS: 1.1.0.rc.2

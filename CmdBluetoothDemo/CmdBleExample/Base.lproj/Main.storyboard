@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="u2J-CS-mEw">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="u2J-CS-mEw">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -90,11 +90,79 @@
                     </view>
                     <connections>
                         <outlet property="tableView" destination="QQa-g4-dfp" id="UWS-u8-6in"/>
+                        <segue destination="MeE-e7-NMf" kind="show" identifier="CmdSeg" id="imU-9k-ERG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qft-3t-l2F" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1741.5999999999999" y="1047.5262368815593"/>
+        </scene>
+        <!--Cmd View Controller-->
+        <scene sceneID="Zq3-P5-bN0">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uHs-Il-8fi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="MeE-e7-NMf" customClass="CmdViewController" customModule="CmdBleExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="9o8-c4-fCg"/>
+                        <viewControllerLayoutGuide type="bottom" id="ez8-dN-ik0"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="rT0-SQ-L3X">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QEK-V4-R4K">
+                                <color key="backgroundColor" red="0.36864123380000002" green="0.58126183710000001" blue="0.46746527980000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="57" id="ljm-ps-PH3"/>
+                                </constraints>
+                                <state key="normal" title="Read RSSI">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="readRSSI:" destination="MeE-e7-NMf" eventType="touchUpInside" id="1bM-dV-Oum"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MuW-1K-GTv">
+                                <color key="backgroundColor" red="0.39868009616762878" green="0.4882555016193374" blue="0.64101594686508179" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="57" id="Vuw-qe-AMe"/>
+                                </constraints>
+                                <state key="normal" title="Syn Time">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="synTime:" destination="MeE-e7-NMf" eventType="touchUpInside" id="R17-ay-m33"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v2D-ns-ITU">
+                                <color key="backgroundColor" red="0.64101594686508179" green="0.36459052509253559" blue="0.62624187413502541" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="57" id="j9I-RB-ecw"/>
+                                </constraints>
+                                <state key="normal" title="GetBattery">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="getBattery:" destination="MeE-e7-NMf" eventType="touchUpInside" id="1p4-nv-kd4"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="MuW-1K-GTv" firstAttribute="leading" secondItem="rT0-SQ-L3X" secondAttribute="leading" id="6I1-pI-8gj"/>
+                            <constraint firstAttribute="trailing" secondItem="QEK-V4-R4K" secondAttribute="trailing" id="DML-RN-OgQ"/>
+                            <constraint firstItem="v2D-ns-ITU" firstAttribute="leading" secondItem="rT0-SQ-L3X" secondAttribute="leading" id="HCQ-vC-zR3"/>
+                            <constraint firstAttribute="trailing" secondItem="v2D-ns-ITU" secondAttribute="trailing" id="Ngt-C9-h9m"/>
+                            <constraint firstItem="QEK-V4-R4K" firstAttribute="top" secondItem="9o8-c4-fCg" secondAttribute="bottom" id="aNE-7S-2tW"/>
+                            <constraint firstItem="v2D-ns-ITU" firstAttribute="top" secondItem="MuW-1K-GTv" secondAttribute="bottom" id="cOW-gq-XUR"/>
+                            <constraint firstItem="QEK-V4-R4K" firstAttribute="leading" secondItem="rT0-SQ-L3X" secondAttribute="leading" id="dEB-uA-6xf"/>
+                            <constraint firstAttribute="trailing" secondItem="MuW-1K-GTv" secondAttribute="trailing" id="dun-45-7sq"/>
+                            <constraint firstItem="MuW-1K-GTv" firstAttribute="top" secondItem="QEK-V4-R4K" secondAttribute="bottom" id="uJY-be-YsH"/>
+                        </constraints>
+                    </view>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="2436" y="1047.5262368815593"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="PNe-w5-CFJ">
