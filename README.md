@@ -6,11 +6,11 @@
 
 communicate with bluetooth using a simple way, v0.1 already support for swift3.0
 
-##Pods Install
+## Pods Install
 
 > pod 'CmdBluetooth', '~> 0.1'
 
-##How to Use CmdBluetooth
+## How to Use CmdBluetooth
 
 ###Init Central
 ```swift
@@ -26,7 +26,7 @@ centralManager.scanWithServices(nil, duration: 5, discoveryHandle: { discovery i
 })
 ```
 
-###Connect 
+### Connect 
 ```swift
 self.centralManager.connect(discovery, duration: 3, success: { (central, peripheral) in
 	//connect discovery successful
@@ -35,9 +35,9 @@ self.centralManager.connect(discovery, duration: 3, success: { (central, periphe
 })
 ```
 
-###Config CenterManager With Parser
+### Config CenterManager With Parser
 
-####Parser
+#### Parser
 befor Communicate with device, you need prepare a parser which providing ble information, such as read UUID Strings, write UUID Strings, you can do like this, just replace UUIDStr with yours
 
 ```swift
@@ -80,7 +80,7 @@ class MyParser: CmdBaseParser {
 }
 ```
 
-####ReceiveDataCenter
+#### ReceiveDataCenter
 receive all data from ble by `parser.dataComingMonitor`, a Monitor is needed,  you can create th monitor like this:
 ```swift
 class ReceiveDataCenter: NSObject, ParserDataReceiveDelegate {
@@ -92,7 +92,7 @@ class ReceiveDataCenter: NSObject, ParserDataReceiveDelegate {
 }
 ```
 
-####Advanced Init
+#### Advanced Init
 ```swift
 let parser = MyParser()
 let receiverCenter = ReceiveDataCenter()
