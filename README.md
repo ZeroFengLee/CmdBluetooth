@@ -12,7 +12,7 @@ communicate with bluetooth using a simple way, v0.1 already support for swift3.0
 
 ## How to Use CmdBluetooth
 
-###Init Central
+### Init Central
 ```swift
 var centralManager = CmdCentralManager.manager
 ```
