@@ -66,6 +66,7 @@ open class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
     //MARK: - CBPeripheralDelegate
     
     open func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+        containCharacteristics.removeAll()
         guard let services = peripheral.services else { return }
         _ = services.map {
             peripheral.discoverCharacteristics(nil, for: $0)
@@ -90,8 +91,9 @@ open class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
     }
     
     open func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        dataComingMonitor?.receiveData(characteristic.value!, peripheral: peripheral, characteristic: characteristic)
-        delegate?.receiveData(characteristic.value!, peripheral: peripheral, characteristic: characteristic)
+        guard let value = characteristic.value else { return }
+        dataComingMonitor?.receiveData(value, peripheral: peripheral, characteristic: characteristic)
+        delegate?.receiveData(value, peripheral: peripheral, characteristic: characteristic)
     }
     
     open func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {

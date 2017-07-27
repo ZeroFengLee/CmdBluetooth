@@ -74,7 +74,6 @@ class CmdConnecter: CentralManagerConnectionDelegate {
         if let failHandle = self.failHandle {
             failHandle(error)
         }
-        print(error)
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {

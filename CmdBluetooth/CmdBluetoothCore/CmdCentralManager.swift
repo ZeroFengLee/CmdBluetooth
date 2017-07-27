@@ -60,17 +60,19 @@ open class CmdCentralManager: NSObject, CentralManagerStateDelegate {
     open var autoConnect = false {
         didSet {
             connecter.autoConnect = autoConnect
-            self.reconnect()
+            if autoConnect {
+                self.reconnect()
+            }
         }
     }
     
-    fileprivate lazy var centerManager: CBCentralManager = {
+    open lazy var centerManager: CBCentralManager = {
         let bleQueue = DispatchQueue(label: "com.zero.queue.ble", attributes: [])
         var centerManager = CBCentralManager(delegate: self.centralProxy, queue: bleQueue)
         return centerManager
     }()
     
-    fileprivate lazy var centralProxy: CentralManagerDelegateProxy = {
+    open lazy var centralProxy: CentralManagerDelegateProxy = {
         var centralProxy = CentralManagerDelegateProxy(stateDelegate: self, discoveryDelegate: self.scanner, connectionDelegate: self.connecter)
         return centralProxy
     }()
@@ -117,18 +119,46 @@ open class CmdCentralManager: NSObject, CentralManagerStateDelegate {
             UserDefaults.standard.set(peripheral.identifier.uuidString, forKey: self.reconnectPeripheralIdentifier)
             }, failHandle: fail)
     }
-    
-    open func cancelConnect() {
-        connecter.disConnect()
-    }
-    
-    open func reconnectWithIdentifier(_ identifier: String?, duration: TimeInterval, success: ConnectSuccessHandle?, fail: ConnectFailHandle?, complete: ScanCompleteHandle?) {
-        self.scanWithServices(nil, duration: duration, discoveryHandle: { discovery in
+    /*
+        `connect discovery with identifier`
+     */
+    open func connect(identifier: String, duration: TimeInterval, success: ConnectSuccessHandle?, fail: ConnectFailHandle?, complete: ScanCompleteHandle?) {
+        self.scanWithServices(nil, duration: duration, discoveryHandle: { [weak self] discovery in
+            guard let `self` = self else { return }
             if discovery.peripheral.identifier.uuidString == identifier {
                 self.stopScan()
                 self.connecter.centralManager = self.centerManager
                 self.connecter.discovery = discovery
-                _ = self.connecter.connectWithDuration(duration, connectSuccess: success, failHandle: fail)
+                _ = self.connecter.connectWithDuration(duration, connectSuccess: { (manager, peripheral) in
+                    UserDefaults.standard.set(peripheral.identifier.uuidString, forKey: self.reconnectPeripheralIdentifier)
+                    success?(manager, peripheral)
+                }, failHandle: fail)
+            }
+            }, completeHandle: complete)
+    }
+    
+    /*
+     - param clearAutoConnect   remove `auto connect` when cancel connect
+     */
+    open func cancelConnect(clearAutoConnect: Bool) {
+        if clearAutoConnect {
+            UserDefaults.standard.removeObject(forKey: reconnectPeripheralIdentifier)
+        }
+        connecter.disConnect()
+    }
+    
+    open func reconnectWithIdentifier(duration: TimeInterval, success: ConnectSuccessHandle?, fail: ConnectFailHandle?, complete: ScanCompleteHandle?) {
+        self.scanWithServices(nil, duration: duration, discoveryHandle: { [weak self] discovery in
+            guard let `self` = self else { return }
+            let uuidStr = UserDefaults.standard.object(forKey: self.reconnectPeripheralIdentifier) as? String
+            if discovery.peripheral.identifier.uuidString == uuidStr {
+                self.stopScan()
+                self.connecter.centralManager = self.centerManager
+                self.connecter.discovery = discovery
+                _ = self.connecter.connectWithDuration(duration, connectSuccess: { (manager, peripheral) in
+                    UserDefaults.standard.set(peripheral.identifier.uuidString, forKey: self.reconnectPeripheralIdentifier)
+                    success?(manager, peripheral)
+                    }, failHandle: fail)
             }
             }, completeHandle: complete)
     }
@@ -153,8 +183,7 @@ open class CmdCentralManager: NSObject, CentralManagerStateDelegate {
     //MARK: - Private Methods
     
     fileprivate func reconnect() {
-        let uuidStr = UserDefaults.standard.object(forKey: reconnectPeripheralIdentifier) as? String
-        self.reconnectWithIdentifier(uuidStr, duration: DBL_MAX, success: nil, fail: nil, complete: nil)
+        self.reconnectWithIdentifier(duration: DBL_MAX, success: nil, fail: nil, complete: nil)
     }
     
     fileprivate class func strsToUuids(_ strs:[String]?) -> [CBUUID]?{

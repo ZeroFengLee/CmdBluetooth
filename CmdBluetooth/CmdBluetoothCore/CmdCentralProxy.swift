@@ -23,7 +23,7 @@ protocol CentralManagerConnectionDelegate: class {
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?)
 }
 
-class CentralManagerDelegateProxy: NSObject, CBCentralManagerDelegate {
+open class CentralManagerDelegateProxy: NSObject, CBCentralManagerDelegate {
     
     weak var stateDelegate: CentralManagerStateDelegate?
     weak var discoveryDelegate: CentralManagerDiscoveryDelegate?
@@ -37,23 +37,23 @@ class CentralManagerDelegateProxy: NSObject, CBCentralManagerDelegate {
     }
     
     // MARK: CBCentralManagerDelegate
-    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+    public func centralManagerDidUpdateState(_ central: CBCentralManager) {
         stateDelegate?.centralManagerDidUpdateState(central)
     }
     
-    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+    public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         discoveryDelegate?.centralManager(central, didDiscoverPeripheral: peripheral, advertisementData: advertisementData as [String : AnyObject], RSSI: RSSI)
     }
     
-    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+    public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         connectionDelegate?.centralManager(central, didConnectPeripheral: peripheral)
     }
     
-    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+    public func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         connectionDelegate?.centralManager(central, didFailToConnectPeripheral: peripheral, error: error as NSError?)
     }
     
-    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+    public func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         connectionDelegate?.centralManager(central, didDisconnectPeripheral: peripheral, error: error as NSError?)
     }
 }
