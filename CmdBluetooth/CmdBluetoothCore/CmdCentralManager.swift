@@ -183,7 +183,7 @@ open class CmdCentralManager: NSObject, CentralManagerStateDelegate {
     //MARK: - Private Methods
     
     fileprivate func reconnect() {
-        self.reconnectWithIdentifier(duration: DBL_MAX, success: nil, fail: nil, complete: nil)
+        self.reconnectWithIdentifier(duration: Double.greatestFiniteMagnitude, success: nil, fail: nil, complete: nil)
     }
     
     fileprivate class func strsToUuids(_ strs:[String]?) -> [CBUUID]?{

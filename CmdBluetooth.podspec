@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "CmdBluetooth"
-  s.version      = "0.2"
+  s.version      = "0.3"
   s.summary      = "for bluetooth4.0."
 
   # This description is used to generate tags and improve search results.
