@@ -13,7 +13,7 @@ import CoreBluetooth.CBCentralManager
 open class CmdCentralManager: NSObject, CentralManagerStateDelegate {
     
     public typealias DiscoveryHandle = ((_ discovery: CmdDiscovery) -> Void)
-    public typealias ScanCompleteHandle = ((Void) -> Void)
+    public typealias ScanCompleteHandle = (() -> Void)
     public typealias ConnectSuccessHandle = ((_ central: CBCentralManager, _ peripheral: CBPeripheral) -> Void)
     public typealias ConnectFailHandle = ((_ error: NSError?) -> Void)
     /**

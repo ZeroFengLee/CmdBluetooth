@@ -116,7 +116,7 @@ open class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
             throw CmdParserError.noPeripheral
         }
         
-        let flatResults = containCharacteristics.flatMap { (chara) -> CBCharacteristic? in
+        let flatResults = containCharacteristics.compactMap { (chara) -> CBCharacteristic? in
             if chara.uuid.uuidString.lowercased() == UUIDStr.lowercased() {
                 return chara
             }
