@@ -64,7 +64,7 @@ class CmdConnecter: CentralManagerConnectionDelegate {
         parser.isFree = true
         parser.connected = true
         parser.peripheral = peripheral
-        parser.startRetrivePeripheral{ [weak self] _ in
+        parser.startRetrivePeripheral{ [weak self] () in
             guard let `self` = self else { return }
             self.successHandle?(central, peripheral)
         }

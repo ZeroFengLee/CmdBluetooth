@@ -36,11 +36,11 @@ public protocol CmdParserSession: class, NSObjectProtocol {
     /**
         `set parser's agent`
      */
-    weak var parserDelegate: ParserDelegate? { get set }
+    var parserDelegate: ParserDelegate? { get set }
     /**
         `data listener`
      */
-    weak var dataComingMonitor: ParserDataReceiveDelegate? {get set}
+    var dataComingMonitor: ParserDataReceiveDelegate? {get set}
     /**
         `peripheral be managed by parser`
      */
@@ -56,7 +56,7 @@ public protocol CmdParserSession: class, NSObjectProtocol {
     /**
         `start to retrive peripheral's services and characteristics`
      */
-    func startRetrivePeripheral(_ complete: ((Void) -> Void)?)
+    func startRetrivePeripheral(_ complete: (() -> Void)?)
     
     /**
         `read a characteristic value manually,`

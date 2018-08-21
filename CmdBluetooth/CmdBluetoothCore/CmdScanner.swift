@@ -12,7 +12,7 @@ import CoreBluetooth
 class CmdScanner: CentralManagerDiscoveryDelegate {
     
     typealias DiscoveryHandle = ((_ discovery: CmdDiscovery) -> Void)
-    typealias CompleteHandle = ((Void) -> Void)
+    typealias CompleteHandle = (() -> Void)
     
     var centralManager: CBCentralManager?
     var servicesUUIDStrs: [String]?
@@ -76,9 +76,7 @@ class CmdScanner: CentralManagerDiscoveryDelegate {
     fileprivate func endScan() {
         invalidateTimer()
         centralManager?.stopScan()
-        if let completeHandle = completeHandle {
-            completeHandle()
-        }
+        completeHandle?()
         completeHandle = nil
         discoveryHandle = nil
     }

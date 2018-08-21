@@ -19,7 +19,7 @@ open class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
     fileprivate var comingDataMonitor: ParserDataReceiveDelegate?
     fileprivate var curPeripheral:CBPeripheral?
     fileprivate lazy var containCharacteristics = [CBCharacteristic]()
-    fileprivate var completeHandle: ((Void) -> Void)?
+    fileprivate var completeHandle: (() -> Void)?
 
     weak open var parserDelegate: ParserDelegate? {
         get { return delegate }
@@ -36,7 +36,7 @@ open class CmdBaseParser:NSObject, CmdParserSession, CBPeripheralDelegate{
         set { curPeripheral = newValue }
     }
     
-    open func startRetrivePeripheral(_ complete: ((Void) -> Void)?) {
+    open func startRetrivePeripheral(_ complete: (() -> Void)?) {
         retriveServiceIndex = 0
         guard let curPeripheral = curPeripheral else { complete?(); return }
         curPeripheral.delegate = self
