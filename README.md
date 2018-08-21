@@ -2,17 +2,17 @@
 
 ![](logo.png)
 
-![](http://img.shields.io/badge/Swift-3-blue.svg)  ![Version](https://img.shields.io/cocoapods/v/CmdBluetooth.svg?style=flat)	![License](https://img.shields.io/cocoapods/l/CmdBluetooth.svg?style=flat)	![Platform](https://img.shields.io/cocoapods/p/CmdBluetooth.svg?style=flat)
+![](https://img.shields.io/badge/Swift-4-orange.svg)  ![Version](https://img.shields.io/cocoapods/v/CmdBluetooth.svg?style=flat)	![License](https://img.shields.io/cocoapods/l/CmdBluetooth.svg?style=flat)	![Platform](https://img.shields.io/cocoapods/p/CmdBluetooth.svg?style=flat)
 
 communicate with bluetooth using a simple way, v0.1 already support for swift3.0
 
 ## Pods Install
 
 > Swift 3.x
-> pod 'CmdBluetooth', '~> 0.3'
+``` pod 'CmdBluetooth', '~> 0.3' ```
 
 > Swift 4.x
-> pod 'CmdBluetooth', '~> 4.1.1'
+``` pod 'CmdBluetooth', '~> 4.1.1' ```
 
 ## How to Use CmdBluetooth
 
