@@ -8,7 +8,11 @@ communicate with bluetooth using a simple way, v0.1 already support for swift3.0
 
 ## Pods Install
 
+> Swift 3.x
 > pod 'CmdBluetooth', '~> 0.3'
+
+> Swift 4.x
+> pod 'CmdBluetooth', '~> 4.1.1'
 
 ## How to Use CmdBluetooth
 
